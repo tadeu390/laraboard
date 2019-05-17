@@ -40,9 +40,7 @@
                 <form action="{{route('usuarios.destroy', $usuario->id)}}" class="form" method="POST">
                     @csrf
                     <input type="hidden" name="_method" value="DELETE">
-                    @can('DELETE')
-                        <button href="submit" class="btn btn-danger">Deletar</button>
-                    @endcan
+                    <button href="submit" class="btn btn-danger">Deletar</button>
                 </form>
             </div>
         </div>

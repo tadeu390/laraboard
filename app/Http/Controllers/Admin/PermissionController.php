@@ -28,9 +28,6 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        if (Gate::denies('SHOW',1)) {
-            abort(403);
-        }
         $permissions = $this->permission->index();
         $breadcrumb = $this->breadcrumb(['Permissões']);
 
