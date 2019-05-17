@@ -1,0 +1,71 @@
+table .fa {
+    font-size: 1.2em;
+}
+
+.bg-success {
+    background-color: #00a65a !important;
+}
+
+.navbar{
+    padding: 0em 1em !important;
+}
+
+.sidebar {
+    margin-left: -4px;
+}
+
+.breadcrumb {
+    background-color: transparent !important;
+    color: white !important;
+    padding: .1rem 1rem;
+}
+
+.breadcrumb a, .breadcrumb-item {
+    color: white !important;
+}
+
+.bg-purple {
+    background-color: #605ca8;
+}
+
+.box-purple {
+    border-top-color: #605ca8;
+}
+
+.btn-purple {
+    color: white;
+    background-color: #605ca8;
+}
+
+.btn-purple:hover {
+    color: white;
+    background-color: #555299;
+}
+
+.fa-chevron-circle-left, .fa-undo {
+    font-size: 25px !important;
+}
+
+.fa-required-size {
+    font-size: .8em !important;
+}
+
+.fa-edit, .fa-info-circle, .fa-lock, #acoes .fa-address-card {
+    color: #605ca8;
+}
+
+#cardsDashboard .fa-users, #cardsDashboard .fa-address-card, #cardsDashboard .fa-check-circle
+{
+    font-size: 100px;
+    color: #605ca8;
+}
+
+#cardsDashboard a
+{
+    color: #605ca8;
+}
+
+.border-fieldset
+{
+    border: 1px solid #ced4da;
+}
