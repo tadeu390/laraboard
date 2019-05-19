@@ -31,6 +31,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
     Route::get('usuarios/showRoles/{user_id}', 'UsuarioController@showRoles')->name('usuarios.showRoles');
     //primeiro a rota search, depois os resources, para todos os casos
     Route::any('usuarios/search', 'UsuarioController@search')->name('usuarios.search');
+    Route::get('usuarios/date', 'UsuarioController@date')->name('usuarios.date');
+    Route::get('usuarios/php7p1', 'UsuarioController@php7p1')->name('usuarios.php7p1');
     Route::resource('usuarios', "UsuarioController");
 
     Route::any('permissions/search', 'PermissionController@search')->name('permissions.search');

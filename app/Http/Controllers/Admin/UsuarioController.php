@@ -38,6 +38,9 @@ class UsuarioController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasPermission()) {
+            abort(403);
+        }
         $breadcrumb = $this->breadcrumb(['Usuários']);
         $usuarios = $this->usuario->index();
 
@@ -236,5 +239,35 @@ class UsuarioController extends Controller
             }
             echo '<br /><br />';
         }
+    }
+
+    public function date()
+    {
+        $date = new \DateTime('2019-01-01');
+        $date->add(new \DateInterval('P1Y1M'));
+        $date->add(new \DateInterval('PT1H'));
+        $date->sub(new \DateInterval('PT30M'));
+        $date = $date->format('d \d\e F \d\e Y');//imprime por extenso a data escapand os caracteres
+        $format = new IntlDateFormatter('pt_BR', IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
+
+        //echo $format->format($date);
+
+        echo'<pre>';
+        var_dump($date);
+    }
+
+    public function php7p1()
+    {
+        function a(?int $x = null):?int
+        {
+            return $x;
+        }
+
+        echo a(null);
+
+        $array = [1, 2, 3];
+        [$x, $y, $z] = $array;
+
+        var_dump($x, $y, $z);
     }
 }
