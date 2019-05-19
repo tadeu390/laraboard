@@ -28,7 +28,7 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        if (Gate::denies('SHOW', \App\Models\Produto::class)) {
+        if (!auth()->user()->hasPermission('READ', 'Produto')) {
             abort(403);
         }
 
@@ -90,10 +90,13 @@ class ProdutoController extends Controller
      */
     public function edit($id)
     {
-        $categorias = $this->categoria->get();
         $produto = $this->produto->edit($id);
-        $this->authorize('edit produto', $produto);
 
+        if (!auth()->user()->hasPermission('UPDATE', 'Produto', $produto)) {
+            $this->denied();
+        }
+
+        $categorias = $this->categoria->get();
         if (!$produto) {
             return redirect()->back();
         }

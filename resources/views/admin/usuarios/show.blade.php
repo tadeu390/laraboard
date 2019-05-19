@@ -29,7 +29,7 @@
                         <tbody>
                             @foreach ($usuario->roles as $item)
                             <tr>
-                                <td>{{$item->name}}</td>
+                                <td><a href="{{route('roles.show', $item->id)}}">{{$item->name}}</a></td>
                                 <td>{{$item->label}}</td>
                             </tr>
                             @endforeach
@@ -37,11 +37,15 @@
                     </table>
                 </fieldset>
                 <br />
-                <form action="{{route('usuarios.destroy', $usuario->id)}}" class="form" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button href="submit" class="btn btn-danger">Deletar</button>
-                </form>
+                <div class="form-inline">
+                    @if (auth()->user()->hasPermission('DELETE', 'users'))
+                        <form action="{{route('usuarios.destroy', $usuario->id)}}" class="form" method="POST">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button href="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

@@ -28,6 +28,8 @@ class RoleController extends Controller
      */
     private $module;
 
+    private CONST NICKNAME = 'roles';
+
     /**
      *  Carrega as instâncias das dependências desta classe.
      */
@@ -45,6 +47,10 @@ class RoleController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $roles = $this->role->index();
         $breadcrumb = $this->breadcrumb(['Funções']);
 
@@ -58,6 +64,10 @@ class RoleController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Funções', 'Novo']);
 
         return view('admin.roles.create', compact('breadcrumb'));
@@ -71,6 +81,10 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->role->store($request->all());
 
         if (!$service->success) {
@@ -95,6 +109,10 @@ class RoleController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $role = $this->role->show($id);
         $breadcrumb = $this->breadcrumb(['Funções', 'Visualizar']);
 
@@ -109,6 +127,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $role = $this->role->edit($id);
         $breadcrumb = $this->breadcrumb(['Funções', 'Editar', $role->name]);
 
@@ -124,6 +146,10 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->role->update($id, $request->all());
 
         if (!$service->success) {
@@ -148,6 +174,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('DELETE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->role->delete($id);
 
         if (!$service->success) {

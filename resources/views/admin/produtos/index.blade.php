@@ -57,16 +57,20 @@
                     </thead>
                     <tbody>
                         @foreach ($produtos as $item)
-                            <tr>
-                                <td>{{$item->id}}</td>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->categoria->title}}</td>
-                                <td>{{$item->price}}</td>
-                                <td>
-                                    <a href="{{route('produtos.edit', $item->id)}}" class="badge bg-yellow">Editar</a>
-                                    <a href="{{route('produtos.show', $item->id)}}" class="badge bg-yellow">Visualizar</a>
-                                </td>
-                            </tr>
+                            @if(auth()->user()->hasPermission('READ', 'Produto', $item))
+                                <tr>
+                                    <td>{{$item->id}}</td>
+                                    <td>{{$item->name}}</td>
+                                    <td>{{$item->categoria->title}}</td>
+                                    <td>{{$item->price}}</td>
+                                    <td>
+                                        @if(auth()->user()->hasPermission('UPDATE', 'Produto', $item))
+                                            <a href="{{route('produtos.edit', $item->id)}}" class="badge bg-yellow">Editar</a>
+                                        @endif
+                                        <a href="{{route('produtos.show', $item->id)}}" class="badge bg-yellow">Visualizar</a>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

@@ -20,4 +20,9 @@ class Controller extends BaseController
 
         return (object) $breacrumb;
     }
+
+    public function denied()
+    {
+        abort(403);
+    }
 }

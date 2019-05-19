@@ -21,9 +21,9 @@
                     @if(isset($data))
                         <a href="{{route('usuarios.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    @can('CREATE')
+                    @if(auth()->user()->hasPermission('CREATE', 'users'))
                         <a href="{{route('usuarios.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
-                    @endcan
+                    @endif
                 </form>
             </div>
         </div>
@@ -47,10 +47,10 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->email}}</td>
                                 <td class="text-right" id="acoes">
-                                    @can('UPDATE')
+                                    @if(auth()->user()->hasPermission('UPDATE', 'users'))
                                         <a href="{{route('usuarios.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
                                         &nbsp;&nbsp;&nbsp;
-                                    @endcan
+                                    @endif
                                     <a href="{{route('usuarios.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="{{route('usuarios.showRoles', $item->id)}}" title="Funções"><i class="fa fa-address-card"></i></a>

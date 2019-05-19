@@ -38,12 +38,18 @@
                     </table>
                 </fieldset>
                 <br />
-                <form action="{{route('roles.destroy', $role->id)}}" class="form" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                    <a href="{{route('roles.showPermissions', $role->id)}}" class="btn btn-purple">Editar permissões</a>
-                </form>
+                <div class="form-inline">
+                    @if (auth()->user()->hasPermission('DELETE', 'roles'))
+                        <form action="{{route('roles.destroy', $role->id)}}" class="form" method="POST">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    @endif
+                    <div class="p-2">
+                        <a href="{{route('roles.showPermissions', $role->id)}}" class="btn btn-purple">Editar permissões</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

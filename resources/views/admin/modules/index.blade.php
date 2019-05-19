@@ -42,7 +42,7 @@
                         @foreach ($modules as $item)
                             <tr>
                                 <td>{{$item->id}}</td>
-                                <td>{{$item->name}}</td>
+                                <td><i class="{{$item->icon}}"></i>&nbsp;&nbsp;{{$item->name}}</td>
                                 <td>{{$item->description}}</td>
                                 <td class="text-right">
                                     <a href="{{route('modules.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>

@@ -8,6 +8,7 @@ use App\Models\Permission;
 
 class User extends Authenticatable
 {
+    CONST PROPRIETARIO = 4;
     use Notifiable;
     /**
      * The attributes that are mass assignable.
@@ -45,16 +46,34 @@ class User extends Authenticatable
      * @param Permission $permission
      * @return bool
      */
-    public function hasPermission(Permission $permission, $instancia = false)
+    public function hasPermission(String $permission, String $moduleName, object $registro = null)
     {
-        $module_id = 0;
-        foreach ($permission->modules as $module) {
-            if($module->name == $instancia) {
-                $module_id = $module->id;
-            }
+        $module = Module::where('nickname', $moduleName)->get()->first();
+
+        if (!$module) {
+            return false;
         }
 
-        return $this->hasAnyRoles($permission->roles, $module_id);
+        $permission = Permission::where('name', $permission)->get()->first();
+        if (!$permission) {
+            return false;
+        }
+
+        if ($registro == null || !is_object($registro)) {
+            $registro = new \stdClass;
+            $registro->user_id = 0;
+        } else {
+            $registro = (object) $registro->toArray();
+        }
+        $permission = $this->hasAnyRoles($permission->roles, $module->id, $registro);
+
+        if ($permission) {
+            return $permission;
+        } else {
+            return false;
+            //chamar HasPermission de group model para verificar se o usuário possui permissão do seu grupo em alguma funcao 
+            //atrelada ao grupo dele
+        }
     }
 
     /**
@@ -64,7 +83,7 @@ class User extends Authenticatable
      * @param array $roles -> Contém todas as funções associada a uma permissão específica
      * @return bool
      */
-    public function hasAnyRoles($roles, $module_id = false)
+    public function hasAnyRoles($roles, $module_id, $registro)
     {
         /**
          * Abaixo buscamos todas as funções associadas ao usuário logado, em seguida retonará true ou false
@@ -74,6 +93,9 @@ class User extends Authenticatable
         if (is_array($roles) || is_object($roles)) {
             foreach ($roles as $role) {
                  if ($this->roles->contains('name', $role->name) && $role->pivot->access_level_id != 1 && $role->pivot->module_id == $module_id) {
+                    if ($role->pivot->access_level_id == User::PROPRIETARIO && auth()->user()->id != $registro->user_id && $registro->user_id != 0) {
+                        return false;
+                    }
                     return true;
                  }
             }

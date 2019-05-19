@@ -35,7 +35,7 @@ class AuthServiceProvider extends ServiceProvider
         //ao arraty permissions vazio ([]). É necessário, pois ao se executar o comando
         //migrate pelo terminal, o provider vai ser executado e a Model Permission caso não exista
         //na base de dados irá dar erro e impedir de criar as migrations.
-        $permissions = app()->runningInConsole() ? [] : Permission::with('roles')->get();
+       /*  $permissions = app()->runningInConsole() ? [] : Permission::with('roles')->get();
 
         foreach ($permissions as $permission) {
             Gate::define($permission->name, function (User $user) use($permission) {
@@ -48,6 +48,6 @@ class AuthServiceProvider extends ServiceProvider
             if($user->hasAnyRoles('admin')) {
                 return true;
             }
-        });
+        }); */
     }
 }

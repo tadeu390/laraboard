@@ -22,6 +22,8 @@ class UsuarioController extends Controller
      */
     protected $role;
 
+    private CONST NICKNAME = 'users';
+
     /**
      *  Carrega as instâncias das dependências desta classe.
      */
@@ -38,9 +40,10 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->hasPermission()) {
-            abort(403);
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
         }
+
         $breadcrumb = $this->breadcrumb(['Usuários']);
         $usuarios = $this->usuario->index();
 
@@ -54,6 +57,10 @@ class UsuarioController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Usuários', 'Novo']);
         return view('admin.usuarios.create', compact('breadcrumb'));
     }
@@ -66,6 +73,10 @@ class UsuarioController extends Controller
      */
     public function store(UsuarioRequest $request)
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->usuario->store($request->all());
 
         if (!$service->success) {
@@ -90,6 +101,10 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Usuários', 'Visualizar']);
         $usuario = $this->usuario->show($id);
 
@@ -107,6 +122,10 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Usuários', 'Editar']);
         $usuario = $this->usuario->edit($id);
 
@@ -126,6 +145,10 @@ class UsuarioController extends Controller
      */
     public function update(UsuarioRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->usuario->update($id, $request->all());
 
         if (!$service->success) {
@@ -150,6 +173,10 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('DELETE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->usuario->delete($id);
 
         if (!$service->success) {
