@@ -1,7 +1,7 @@
 # Laraboard
 <p>Laraboard é um dashboard opensource, desenvolvido com o framework Laravel e a interface do AdminLte. O sistema possui uma completa divisão de camadas, o que nos permite determinar com precisão as responsabilidades de cada componente do sistema. Como sabemos, o Laravel é um framework MVC e para facilitar o desenvolvimento de aplicações, foi adicionado uma camada de serviços onde a mesma fica encarregada das regras de negócios e também uma camada de repositório (Design Patterns) responsável pela manipulação de dados no banco.</p>
 
-## Sobre
+## Objetivo
 <p>O objetivo do projeto é fornecer um start para projetos de médio e grande porte. A plataforma fornece um rígido controle de acesso a todos os módulos presentes no sistema. Isto é, o usuário administrador pode controlar de forma rápida e intuitiva o acesso de cada usuário ao sistema. A medida que outros módulos são adicionados ao sistema, o controle de acesso a estes pode ser configurado no código fonte adicionando poquissímas linhas de código.</p>
 <br />
 
