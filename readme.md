@@ -1,12 +1,11 @@
 # Laraboard
-<p>Laraboard é um dashboard opensource, desenvolvido com o framework Laravel e a interface do AdminLte.</p>
-<br />
+<p>Laraboard é um dashboard opensource, desenvolvido com o framework Laravel e a interface do AdminLte. O sistema possui uma completa divisão de camadas, o que nos permite determinar com precisão as responsabilidades de cada componente do sistema. Como sabemos, o Laravel é um framework MVC e para facilitar o desenvolvimento de aplicações, foi adicionado uma camada de serviços onde a mesma fica encarregada das regras de negócios e também uma camada de repositório (Design Patterns) responsável pela manipulação de dados no banco.</p>
 
 ## Sobre
 <p>O objetivo do projeto é fornecer um start para projetos de médio e grande porte. A plataforma fornece um rígido controle de acesso a todos os módulos presentes no sistema. Isto é, o usuário administrador pode controlar de forma rápida e intuitiva o acesso de cada usuário ao sistema. A medida que outros módulos são adicionados ao sistema, o controle de acesso a estes pode ser configurado no código fonte adicionando poquissímas linhas de código.</p>
 <br />
 
-## Módulos
+## Módulos do sistema
 <p>Inicialmente, o sistema vem com os seguintes módulos que permitem com que o usuário administrador tenha total controle do sistema:</p>
 <ul>
     <li>Módulos</li>
@@ -53,7 +52,7 @@ Este módulo é a raiz do controle de acesso, sem ele devidamente configurado, n
         <li>Todos</li>
     </ul>
 <p>
-    Se em qualquer função, algum módulo estiver com esse nível de permissão selecionado para alguma permissão, o usuário recebe acesso total ao módulo em questão para ese tipo de permissão.
+    Se em qualquer função, algum módulo estiver com esse nível de permissão selecionado para alguma permissão, o usuário recebe acesso total ao módulo em questão para esse tipo de permissão.
 </p>
     <ul>
         <li>Grupo</li>
@@ -80,7 +79,7 @@ Este módulo é a raiz do controle de acesso, sem ele devidamente configurado, n
     
 #### Nota
 <p>
-    Todas as funções associadas ao usuário precedem as funções associadas a qualquer grupo que um usuário possa fazer parte.
+   <b> Todas as funções associadas ao usuário precedem as funções associadas a qualquer grupo que um usuário possa fazer parte.</b>
     </p>
     
     
