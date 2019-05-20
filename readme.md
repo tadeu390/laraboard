@@ -72,10 +72,12 @@ Este módulo é a raiz do controle de acesso, sem ele devidamente configurado, n
 <p>
     Dentro do laraboard é possível criar grupos de usuários e a cada grupo é possível atribuir várias funções diferentes. Estas funções definem o nível de acesso de todos os usuários associados ao grupo. 
     </p>
+    
 ### Usuários
 <p>
     Este módulo permite com que cadastremos todos os usuários. Aqui também podemos associar o usuário a um ou mais grupos, conforme a necessidade. Por fim, podemos associar uma ou mais funções a usuário.
     </p>
+    
 #### Nota
 <p>
     Todas as funções associadas ao usuário precedem as funções associadas a qualquer grupo que um usuário possa fazer parte.
