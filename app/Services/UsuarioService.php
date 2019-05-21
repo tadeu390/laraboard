@@ -180,4 +180,35 @@ class UsuarioService
             ];
         }
     }
+
+    /**
+     * Atualiza as funções de um usuário.
+     *
+     * @param array $data
+     * @param int $id
+     */
+    public function updateGroups($data, $id)
+    {
+        try {
+            $user = $this->repository->findById($id);
+
+            if (isset($data['groups'])) {
+                $user->groups()->sync($data['groups']);
+            } else {
+                $user->groups()->detach();
+            }
+
+            return (object) [
+                'success' => true,
+                'message' => 'Grupos alterados com sucesso.'
+            ];
+
+        } catch (\Exception $e) {
+            return (object) [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'class' => get_class($e)
+            ];
+        }
+    }
 }

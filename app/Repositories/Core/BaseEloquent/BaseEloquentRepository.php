@@ -68,6 +68,12 @@ class BaseEloquentRepository implements RepositoryInterface
         return $this;
     }
 
+    public function groupBy($column)
+    {
+        $this->entity = $this->entity->groupBy($column);
+        return $this;
+    }
+
     public function resolveEntity()
     {
         if (!method_exists($this, 'entity')) {

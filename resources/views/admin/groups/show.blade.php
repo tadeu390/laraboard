@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Visualizar permissão')
+@section('title', 'Visualizar grupo')
 
 @section('content')
     <div class="content row">
@@ -11,44 +11,61 @@
                 <input type="hidden" name="_method" value="PUT">
                 <div class="form-group">
                     <label for="name">Nome</label>
-                    <input readonly="readonly" type="text" id="name" value="{{$permission->name ?? old('name')}}" name="name" class="form-control">
+                    <input readonly="readonly" type="text" id="name" value="{{$group->name}}" name="name" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="label">Descrição</label>
-                    <input readonly="readonly" type="text" id="label" value="{{$permission->label ?? old('label')}}" name="label" class="form-control">
+                    <input readonly="readonly" type="text" id="label" value="{{$group->description}}" name="label" class="form-control">
                 </div>
                 <fieldset class="p-2 border-fieldset">
-                    <legend class="p-2">Funções</legend>
+                    <legend class="p-2">Funções &nbsp;<i class="fa fa-fw fa-address-card"></i></legend>
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <td>Nome</td>
                                 <td>Descrição</td>
-                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($permission->roles as $item)
+                            @foreach ($group->roles as $item)
                             <tr>
-                                <td>{{$item->name}}</td>
+                                <td><a href="{{route('roles.show', $item->id)}}">{{$item->name}}</a></td>
                                 <td>{{$item->label}}</td>
-                                <td>
-                                    <a title="Remover função" 
-                                        href="{{route('permissions.removeFuncao', [$permission->id, $item->id])}}" 
-                                        class="btn btn-danger"><i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </fieldset>
+                <fieldset class="p-2 border-fieldset">
+                        <legend class="p-2">Usuários &nbsp;<i class="fa fa-fw fa-users"></i></legend>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>E-mail</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($group->users as $item)
+                                <tr>
+                                    <td><a href="{{route('roles.show', $item->id)}}">{{$item->name}}</a></td>
+                                    <td>{{$item->email}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </fieldset>
                 <br />
-                <form action="{{route('permissions.destroy', $permission->id)}}" class="form" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                </form>
+                <div class="form-inline">
+                    @if (auth()->user()->hasPermission('DELETE', 'groups'))
+                        <form action="{{route('groups.destroy', $group->id)}}" class="form" method="POST">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

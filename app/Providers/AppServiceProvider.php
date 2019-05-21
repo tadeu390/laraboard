@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Categoria;
 use App\Models\AccessLevel;
+use App\Models\Module;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,13 @@ class AppServiceProvider extends ServiceProvider
                 foreach (AccessLevel::pluck('name', 'id') as $key => $item) {
                     $view->atributos[$key] = ['title' => $item];
                 }
+            }
+        );
+
+        view()->composer(
+            '*',
+            function ($view) {
+                $view->with('modules_menu', Module::where('id','>', 0)->get());
             }
         );
     }

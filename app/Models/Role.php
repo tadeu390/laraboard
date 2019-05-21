@@ -30,4 +30,9 @@ class Role extends Model
     {
         return $this->belongsToMany(\App\Models\AccessLevel::class, 'accesses')->withPivot('module_id', 'permission_id');
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
 }

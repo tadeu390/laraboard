@@ -50,8 +50,16 @@ table .fa {
     font-size: .8em !important;
 }
 
-.fa-edit, .fa-info-circle, .fa-lock, #acoes .fa-address-card {
+.fa-edit, .fa-info-circle, .fa-lock, #acoes .fa-address-card, #acoes .fa-object-group {
     color: #605ca8;
+}
+
+a{
+    color: #605ca8;
+}
+
+a:hover{
+    color: #555299;
 }
 
 #cardsDashboard .fa-users, #cardsDashboard .fa-address-card, #cardsDashboard .fa-check-circle
@@ -68,4 +76,12 @@ table .fa {
 .border-fieldset
 {
     border: 1px solid #ced4da;
+}
+
+.fullScreen
+{
+    position: absolute;
+    width: 99%;
+    left: 30px;
+    top: 30px;
 }

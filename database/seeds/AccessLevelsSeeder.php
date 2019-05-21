@@ -6,6 +6,8 @@ class AccessLevelsSeeder extends Seeder
 {
     public function run()
     {
+        $access = ['name' => 'Desativado'];
+        DB::table('access_levels')->insert($access);
 		$access = ['name' => 'Não definido'];
         DB::table('access_levels')->insert($access);
         $access = ['name' => 'Todos'];

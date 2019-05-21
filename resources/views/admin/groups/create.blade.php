@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Nova permissão')
+@section('title', 'Novo grupo')
 
 @section('content_header')
 
@@ -12,8 +12,8 @@
             @include('admin.includes.header_form')
             <div class="box-body">
                 @include("admin.includes.alerts")
-                {{ Form::open(['route' => 'permissions.store', 'class' => 'form', 'method' => 'POST']) }}
-                    @include('admin.permissions._partials.form')
+                {{ Form::open(['route' => 'groups.store', 'class' => 'form', 'method' => 'POST']) }}
+                    @include('admin.groups._partials.form')
                     <div class="form-group">
                         <button type="submit" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></button>
                     </div>

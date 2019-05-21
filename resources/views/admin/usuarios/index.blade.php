@@ -54,6 +54,8 @@
                                     <a href="{{route('usuarios.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="{{route('usuarios.showRoles', $item->id)}}" title="Funções"><i class="fa fa-address-card"></i></a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <a href="{{route('usuarios.showGroups', $item->id)}}" title="Grupos"><i class="fa fa-fw fa-object-group"></i></a>
                                 </td>
                             </tr>
                         @endforeach

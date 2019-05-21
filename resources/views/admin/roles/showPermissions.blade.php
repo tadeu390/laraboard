@@ -3,9 +3,9 @@
 @section('title', 'Editar permissões da função')
 
 @section('content')
-    <div class="content row">
+    <div class="content row" id='content'>
         <div class="box box-purple">
-            @include('admin.includes.header_form')
+            @include('admin.includes.header')
             <div class="box-body">
                 @include("admin.includes.alerts")
                 <form action="{{route('roles.updatePermissions', $role->id)}}" class="form" method="POST">
@@ -16,7 +16,7 @@
                         <input readonly="readonly" type="text" id="name" value="{{$role->name ?? old('name')}}" name="name" class="form-control">
                     </div>
                     <fieldset class="p-2 border-fieldset">
-                        <legend class="p-2">Permissões</legend>
+                        <legend class="p-2">Permissões &nbsp;<i class="fa fa-fw fa-check-circle "></i></legend>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -30,16 +30,17 @@
                                 @foreach ($modules as $module)
                                     <tr>
                                         <td>
-                                            {{$module->name}}
+                                            <i class="{{$module->icon}}"></i>&nbsp;{{$module->name}}
                                             {{Form::hidden('module'.$module->id, $module->id)}}
                                         </td>
                                         @foreach ($permissions as $permission)
                                             <td>
                                                 <?php
-                                                    $level = 1;
+                                                    $level = 2;//não definido
                                                     foreach ($role->access_levels as $p) {
-                                                        if($p->pivot->module_id == $module->id && $p->pivot->permission_id == $permission->id)
+                                                        if ($p->pivot->module_id == $module->id && $p->pivot->permission_id == $permission->id) {
                                                             $level = $p->pivot->access_level_id;
+                                                        }
                                                     }
                                                 ?>
                                                 {!! Form::select('module'.$module->id.'_'.$permission->name,

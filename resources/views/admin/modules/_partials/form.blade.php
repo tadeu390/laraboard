@@ -15,6 +15,6 @@
     <input type="text" id="icon" value="{{$module->icon ?? old('icon')}}" name="icon" class="form-control">
 </div>
 <div class="form-group">
-    <label for="nickname">Apelido</label><i class="p-2 fa fa-asterisk text-danger fa-required-size"></i>
-    <input type="text" id="nickname" value="{{$module->nickname ?? old('nickname')}}" name="nickname" class="form-control">
+    <label for="nick_name">Apelido</label><i class="p-2 fa fa-asterisk text-danger fa-required-size"></i>
+    <input type="text" id="nick_name" value="{{$module->nick_name ?? old('nick_name')}}" name="nick_name" class="form-control">
 </div>

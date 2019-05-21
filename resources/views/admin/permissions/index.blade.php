@@ -21,7 +21,9 @@
                     @if(isset($data))
                         <a href="{{route('permissions.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    <a href="{{route('permissions.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
+                    @if (auth()->user()->hasPermission('CREATE', 'permissions'))
+                        <a href="{{route('permissions.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
+                    @endif
                 </form>
             </div>
         </div>
@@ -45,8 +47,10 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->label}}</td>
                                 <td class="text-right">
-                                    <a href="{{route('permissions.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
-                                    &nbsp;&nbsp;&nbsp;
+                                    @if (auth()->user()->hasPermission('UPDATE', 'permissions'))
+                                        <a href="{{route('permissions.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
+                                        &nbsp;&nbsp;&nbsp;
+                                    @endif
                                     <a href="{{route('permissions.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                 </td>
                             </tr>

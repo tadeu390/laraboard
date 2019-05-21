@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar funções do usuário')
+@section('title', 'Editar funções do grupo')
 
 @section('content')
     <div class="content row">
@@ -8,12 +8,12 @@
             @include('admin.includes.header_form')
             <div class="box-body">
                 @include("admin.includes.alerts")
-                <form action="{{route('usuarios.updateRoles', $usuario->id)}}" class="form" method="POST">
+                <form action="{{route('groups.updateRoles', $group->id)}}" class="form" method="POST">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
                     <div class="form-group">
                             <label for="name">Nome</label>
-                        <input readonly="readonly" type="text" id="name" value="{{$usuario->name ?? old('name')}}" name="name" class="form-control">
+                        <input readonly="readonly" type="text" id="name" value="{{$group->name}}" name="name" class="form-control">
                     </div>
                     <fieldset class="p-2 border-fieldset">
                         <legend class="p-2">Funções &nbsp;<i class="fa fa-fw fa-address-card"></i></legend>
@@ -32,7 +32,7 @@
                                     <td>{{$item->label}}</td>
                                     <td>
                                         <?php $checked = ""; ?>
-                                        @foreach ($usuario->roles as $item2)
+                                        @foreach ($group->roles as $item2)
                                             <?php if($item2->id == $item->id) $checked = "checked"; ?>
                                         @endforeach
                                         <div class="custom-control custom-switch">

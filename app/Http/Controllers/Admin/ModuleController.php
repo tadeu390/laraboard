@@ -14,6 +14,11 @@ class ModuleController extends Controller
     protected $module;
 
     /**
+     * Identificador do módulo
+     */
+    private CONST NICKNAME = 'modules';
+
+    /**
      *  Carrega as instâncias das dependências desta classe.
      */
     public function __construct(ModuleService $module)
@@ -28,6 +33,10 @@ class ModuleController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Módulos']);
         $modules = $this->module->index();
 
@@ -41,6 +50,10 @@ class ModuleController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Módulos', 'Novo']);
         return view('admin.modules.create', compact('breadcrumb'));
     }
@@ -53,6 +66,10 @@ class ModuleController extends Controller
      */
     public function store(ModuleRequest $request)
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->module->store($request->all());
 
         if (!$service->success) {
@@ -77,6 +94,10 @@ class ModuleController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Módulos', 'Visualizar']);
         $module = $this->module->show($id);
 
@@ -94,6 +115,10 @@ class ModuleController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Módulos', 'Editar']);
         $module = $this->module->edit($id);
 
@@ -113,6 +138,10 @@ class ModuleController extends Controller
      */
     public function update(ModuleRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->module->update($id, $request->all());
 
         if (!$service->success) {
@@ -137,6 +166,10 @@ class ModuleController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('DELETE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->module->delete($id);
 
         if (!$service->success) {

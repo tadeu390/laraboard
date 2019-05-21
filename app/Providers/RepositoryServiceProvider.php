@@ -9,7 +9,8 @@ use App\Repositories\Contracts\{
     RoleRepositoryInterface,
     PermissionRepositoryInterface,
     ModuleRepositoryInterface,
-    AccessRepositoryInterface
+    AccessRepositoryInterface,
+    GroupRepositoryInterface
 };
 
 
@@ -22,7 +23,8 @@ use App\Repositories\Core\{
     EloquentRoleRepository,
     EloquentPermissionRepository,
     EloquentModuleRepository,
-    EloquentAccessRepository
+    EloquentAccessRepository,
+    EloquentGroupRepository
 };
 
 /* use App\Repositories\Core\QueryBuilder\{
@@ -71,6 +73,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AccessRepositoryInterface::class,
             EloquentAccessRepository::class
+        );
+
+        $this->app->bind(
+            GroupRepositoryInterface::class,
+            EloquentGroupRepository::class
         );
     }
 

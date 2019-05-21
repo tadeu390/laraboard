@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UsuarioRequest;
 use App\Services\{
     UsuarioService,
-    RoleService
+    RoleService,
+    GroupService
 };
 use Illuminate\Support\Facades\Gate;
 
@@ -22,15 +23,21 @@ class UsuarioController extends Controller
      */
     protected $role;
 
+    /**
+     * @var GroupService
+     */
+    protected $group;
+
     private CONST NICKNAME = 'users';
 
     /**
      *  Carrega as instâncias das dependências desta classe.
      */
-    public function __construct(UsuarioService $usuario, RoleService $role)
+    public function __construct(UsuarioService $usuario, RoleService $role, GroupService $group)
     {
         $this->usuario = $usuario;
         $this->role = $role;
+        $this->group = $group;
     }
 
     /**
@@ -235,6 +242,46 @@ class UsuarioController extends Controller
 
         if (!$service->success) {
             return redirect()->route('usuarios.showRoles', $id)
+                    ->with('error', [
+                        'class' => $service->class,
+                        'message' => $service->message
+                    ])
+                    ->withInput();
+        }
+
+        return redirect()
+                        ->route('usuarios.index')
+                        ->withSuccess($service->message);
+    }
+
+    /**
+     * Exibe o formulário de funções do grupo.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showGroups(int $id)
+    {
+        $usuario = $this->usuario->edit($id);
+        $groups = $this->group->getAll();
+        $breadcrumb = $this->breadcrumb(['Usuários', 'Editar grupos']);
+
+        return view('admin.usuarios.showGroups', compact('breadcrumb', 'usuario', 'groups'));
+    }
+
+    /**
+     * Altera as funções do usuário.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateGroups(Request $request, int $id)
+    {
+        $service = $this->usuario->updateGroups($request->all(), $id);
+
+        if (!$service->success) {
+            return redirect()->route('usuarios.show', $id)
                     ->with('error', [
                         'class' => $service->class,
                         'message' => $service->message

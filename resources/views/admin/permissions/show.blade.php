@@ -24,7 +24,6 @@
                             <tr>
                                 <td>Nome</td>
                                 <td>Descrição</td>
-                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,23 +31,21 @@
                             <tr>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->label}}</td>
-                                <td>
-                                    <a title="Remover função" 
-                                        href="{{route('permissions.removeFuncao', [$permission->id, $item->id])}}" 
-                                        class="btn btn-danger"><i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </fieldset>
                 <br />
-                <form action="{{route('permissions.destroy', $permission->id)}}" class="form" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                </form>
+                <div class="form-inline">
+                    @if (auth()->user()->hasPermission('DELETE', 'permissions'))
+                        <form action="{{route('permissions.destroy', $permission->id)}}" class="form" method="POST">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

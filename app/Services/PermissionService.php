@@ -46,7 +46,12 @@ class PermissionService
      */
     public function show($id)
     {
-        return $this->repository->findWhereFirst('id', $id);
+        $permissions = $this->repository
+                                ->relationships('roles')
+                                ->findWhereFirst('id', $id);
+        $permissions->roles = $permissions->roles()->groupBy('id')->get();
+
+        return $permissions;
     }
 
     /**
@@ -142,32 +147,5 @@ class PermissionService
     public function countPermission()
     {
         return count($this->repository->getAll());
-    }
-
-    /**
-     * Desvincula uma função de uma permissão.
-     *
-     * @param int $permission_id
-     * @param int $role_id
-     * @return object mixed
-     */
-    public function removeFuncao($permission_id, $role_id)
-    {
-        try {
-            $permission = $this->repository->findById($permission_id);
-            $permission->roles()->detach($role_id);
-
-            return (object) [
-                'success' => true,
-                'message' => 'Função desvinculada com sucesso.'
-            ];
-
-        } catch (\Exception $e) {
-            return (object) [
-                'success' => false,
-                'message' => $e->getMessage(),
-                'class' => get_class($e)
-            ];
-        }
     }
 }

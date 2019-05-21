@@ -14,6 +14,11 @@ class PermissionController extends Controller
     private $permission;
 
     /**
+     * Identificador do módulo
+     */
+    private CONST NICKNAME = 'permissions';
+
+    /**
      *  Carrega as instâncias das dependências desta classe.
      */
     public function __construct(PermissionService $permission)
@@ -28,6 +33,10 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $permissions = $this->permission->index();
         $breadcrumb = $this->breadcrumb(['Permissões']);
 
@@ -41,6 +50,10 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $breadcrumb = $this->breadcrumb(['Permissões', 'Novo']);
 
         return view('admin.permissions.create', compact('breadcrumb'));
@@ -54,6 +67,10 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
+        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->permission->store($request->all());
 
         if (!$service->success) {
@@ -78,6 +95,10 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $permission = $this->permission->show($id);
         $breadcrumb = $this->breadcrumb(['Permissões', 'Visualizar']);
 
@@ -92,6 +113,10 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $permission = $this->permission->edit($id);
         $breadcrumb = $this->breadcrumb(['Permissões', 'Editar', $permission->name]);
 
@@ -107,6 +132,10 @@ class PermissionController extends Controller
      */
     public function update(PermissionRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->permission->update($id, $request->all());
 
         if (!$service->success) {
@@ -131,6 +160,10 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('DELETE', self::NICKNAME)) {
+            $this->denied();
+        }
+
         $service = $this->permission->delete($id);
 
         if (!$service->success) {
@@ -144,31 +177,6 @@ class PermissionController extends Controller
 
         return redirect()
                         ->route('permissions.index')
-                        ->withSuccess($service->message);
-    }
-
-    /**
-     * Envia para a camada de serviço a solicitação de desvínculo entre uma função e uma permissão.
-     *
-     * @param  int  $permission_id
-     * @param  int  $role_id
-     * @return \Illuminate\Http\Response
-     */
-    public function removeFuncao(int $permission_id, int $role_id)
-    {
-        $service = $this->permission->removeFuncao($permission_id, $role_id);
-
-        if (!$service->success) {
-            return redirect()->route('permissions.show', $permission_id)
-                    ->with('error', [
-                        'class' => $service->class,
-                        'message' => $service->message
-                    ])
-                    ->withInput();
-        }
-
-        return redirect()
-                        ->route('permissions.show', $permission_id)
                         ->withSuccess($service->message);
     }
 }

@@ -19,7 +19,7 @@ class CreateModulesTable extends Migration
             $table->string('description', 100);
             $table->string('url', 100);
             $table->string('icon', 50);
-            $table->string('nickname', 100);
+            $table->string('nick_name', 100);
             $table->timestamps();
         });
     }

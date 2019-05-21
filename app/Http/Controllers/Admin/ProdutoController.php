@@ -44,6 +44,9 @@ class ProdutoController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('CREATE', 'Produto')) {
+            abort(403);
+        }
         $categorias = $this->categoria->get();
 
         return view('admin.produtos.create', compact('categorias'));

@@ -21,6 +21,16 @@ class GroupService
     }
 
     /**
+     * Retorna uma lista contendo todas as funções.
+     *
+     * @return object mixed
+     */
+    public function getAll()
+    {
+        return $this->repository->getAll();
+    }
+
+    /**
      * Retorna os dados do registro
      *
      * @return object mixed
@@ -38,7 +48,7 @@ class GroupService
      */
     public function show($id)
     {
-        return $this->repository->findWhereFirst('id', $id);
+        return $this->repository->relationships('roles')->findWhereFirst('id', $id);
     }
 
     /**

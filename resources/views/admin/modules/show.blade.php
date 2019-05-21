@@ -25,12 +25,20 @@
                     <label for="icon">Ícone</label>
                     <input readonly="readonly" type="text" id="icon" value="{{$module->icon ?? old('icon')}}" name="icon" class="form-control">
                 </div>
+                <div class="form-group">
+                    <label for="nick_name">Apelido</label>
+                    <input readonly="readonly" type="text" id="nick_name" value="{{$module->nick_name ?? old('nick_name')}}" name="nick_name" class="form-control">
+                </div>
                 <br />
-                <form action="{{route('modules.destroy', $module->id)}}" class="form" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger">Deletar</button>
-                </form>
+                <div class="form-inline">
+                    @if (auth()->user()->hasPermission('DELETE', 'modules'))
+                        <form action="{{route('modules.destroy', $module->id)}}" class="form" method="POST">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Deletar</button>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

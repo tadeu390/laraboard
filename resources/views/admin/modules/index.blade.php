@@ -21,7 +21,9 @@
                     @if(isset($data))
                         <a href="{{route('modules.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    <a href="{{route('modules.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
+                    @if (auth()->user()->hasPermission('CREATE', 'modules'))
+                        <a href="{{route('modules.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
+                    @endif
                 </form>
             </div>
         </div>
@@ -45,8 +47,10 @@
                                 <td><i class="{{$item->icon}}"></i>&nbsp;&nbsp;{{$item->name}}</td>
                                 <td>{{$item->description}}</td>
                                 <td class="text-right">
-                                    <a href="{{route('modules.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
-                                    &nbsp;&nbsp;&nbsp;
+                                    @if (auth()->user()->hasPermission('UPDATE', 'modules'))
+                                        <a href="{{route('modules.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
+                                        &nbsp;&nbsp;&nbsp;
+                                    @endif
                                     <a href="{{route('modules.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                 </td>
                             </tr>

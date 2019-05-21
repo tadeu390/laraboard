@@ -27,6 +27,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
     Route::get('/', 'DashboardController@index')->name('admin');
 
 
+    Route::get('usuarios/showGroups/{user_id}', 'UsuarioController@showGroups')->name('usuarios.showGroups');
+    Route::put('usuarios/updateGroups/{user_id}', 'UsuarioController@updateGroups')->name('usuarios.updateGroups');
     Route::put('usuarios/updateRoles/{user_id}', 'UsuarioController@updateRoles')->name('usuarios.updateRoles');
     Route::get('usuarios/showRoles/{user_id}', 'UsuarioController@showRoles')->name('usuarios.showRoles');
     //primeiro a rota search, depois os resources, para todos os casos
@@ -47,6 +49,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
     Route::any('modules/search', 'ModuleController@search')->name('modules.search');
     Route::resource('modules', 'ModuleController');
 
+    Route::get('groups/showRoles/{group_id}', 'GroupController@showRoles')->name('groups.showRoles');
+    Route::put('groups/updateRoles/{group_id}', 'GroupController@updateRoles')->name('groups.updateRoles');
     Route::any('groups/search', 'GroupController@search')->name('groups.search');
     Route::resource('groups', 'GroupController');
 
