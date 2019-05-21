@@ -28,8 +28,8 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->hasPermission('READ', 'Produto')) {
-            abort(403);
+        if (Gate::denies('READ', 'Produto')) {
+            abort(401);
         }
 
         $produtos = $this->produto->index();

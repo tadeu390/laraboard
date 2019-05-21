@@ -64,9 +64,9 @@
                                     <td>{{$item->categoria->title}}</td>
                                     <td>{{$item->price}}</td>
                                     <td>
-                                        @if(auth()->user()->hasPermission('UPDATE', 'Produto', $item))
+                                        @can('READ', 'Produto', $item)
                                             <a href="{{route('produtos.edit', $item->id)}}" class="badge bg-yellow">Editar</a>
-                                        @endif
+                                        @endcan
                                         <a href="{{route('produtos.show', $item->id)}}" class="badge bg-yellow">Visualizar</a>
                                     </td>
                                 </tr>

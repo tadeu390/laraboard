@@ -29,25 +29,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //os providers sempre rodam antes de qualquer operacao, seja ela uma requisicao
-        //pelo navegador ou seja ela um comando executado no terminal, portanto é necessário
-        //fazer a verificação abaixo. Isto é, se for algo terminal ele simplesmente atribuit
-        //ao arraty permissions vazio ([]). É necessário, pois ao se executar o comando
-        //migrate pelo terminal, o provider vai ser executado e a Model Permission caso não exista
-        //na base de dados irá dar erro e impedir de criar as migrations.
-       /*  $permissions = app()->runningInConsole() ? [] : Permission::with('roles')->get();
+        Gate::define('CREATE', function ($user, $module_name, $registro = null) {
+            return $user->hasPermission('CREATE', $module_name, $registro);
+        });
 
-        foreach ($permissions as $permission) {
-            Gate::define($permission->name, function (User $user) use($permission) {
-                return $user->hasPermission($permission);
-            });
-        }
+        Gate::define('READ', function ($user, $module_name, $registro = null) {
+            return $user->hasPermission('READ', $module_name, $registro);
+        });
 
-        //executa antes da lógica acima. Com isso permitimos acesso root ao nosso sistema.
-        Gate::before(function(User $user, $permission) {
-            if($user->hasAnyRoles('admin')) {
-                return true;
-            }
-        }); */
+        Gate::define('UPDATE', function ($user, $module_name, $registro = null) {
+            return $user->hasPermission('UPDATE', $module_name, $registro);
+        });
+
+        Gate::define('DELETE', function ($user, $module_name, $registro = null) {
+            return $user->hasPermission('DELETE', $module_name, $registro);
+        });
     }
 }

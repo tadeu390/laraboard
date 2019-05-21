@@ -55,9 +55,9 @@ class User extends Authenticatable
      * @param Permission $permission
      * @return bool
      */
-    public function hasPermission(String $permission, String $moduleName, object $registro = null)
+    public function hasPermission(String $permission, String $module_name, object $registro = null)
     {
-        $module = Module::where('nick_name', $moduleName)->get()->first();
+        $module = Module::where('nick_name', $module_name)->get()->first();
 
         if (!$module) {
             return false;
