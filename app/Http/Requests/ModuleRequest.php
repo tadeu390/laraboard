@@ -28,7 +28,7 @@ class ModuleRequest extends FormRequest
             'description' => 'required|max:100',
             'url' => 'required|max:100',
             'icon' => 'required|max:50',
-            'nickname' => 'required|max:100',
+            'nick_name' => 'required|max:100',
         ];
     }
 
@@ -39,7 +39,7 @@ class ModuleRequest extends FormRequest
             'description' => 'Descrição',
             'url' => 'Url',
             'icon' => 'Ícone',
-            'nickname' => 'Apelido',
+            'nick_name' => 'Apelido',
         ];
     }
 }

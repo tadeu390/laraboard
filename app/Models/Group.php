@@ -37,7 +37,7 @@ class Group extends Model
                         $sameGroup = $sameGroup->sameGroup($registro);
                     }
 
-                    if ($role->pivot->access_level_id == User::PROPRIETARIO && auth()->user()->id != $registro->user_id && 
+                    if ($role->pivot->access_level_id == User::PROPRIETARIO && auth()->user()->id != $registro->user_id &&
                         $registro->user_id != 0
                     ) {
                         return false;
