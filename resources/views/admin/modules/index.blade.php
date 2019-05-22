@@ -44,7 +44,7 @@
                         @foreach ($modules as $item)
                             <tr>
                                 <td>{{$item->id}}</td>
-                                <td><i class="{{$item->icon}}"></i>&nbsp;&nbsp;{{$item->name}}</td>
+                                <td><i class="fa fa-fw fa-{{$item->icon}}"></i>&nbsp;&nbsp;{{$item->name}}</td>
                                 <td>{{$item->description}}</td>
                                 <td class="text-right">
                                     @if (auth()->user()->hasPermission('UPDATE', 'modules'))
