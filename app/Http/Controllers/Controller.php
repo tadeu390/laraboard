@@ -23,6 +23,6 @@ class Controller extends BaseController
 
     public function denied()
     {
-        abort(403);
+        abort(401);
     }
 }

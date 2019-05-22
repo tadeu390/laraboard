@@ -64,7 +64,7 @@
                                     <td>{{$item->categoria->title}}</td>
                                     <td>{{$item->price}}</td>
                                     <td>
-                                        @can('READ', 'Produto', $item)
+                                        @can('UPDATE', 'Produto', $item)
                                             <a href="{{route('produtos.edit', $item->id)}}" class="badge bg-yellow">Editar</a>
                                         @endcan
                                         <a href="{{route('produtos.show', $item->id)}}" class="badge bg-yellow">Visualizar</a>

@@ -47,7 +47,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+        if (Gate::denies('READ', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -64,7 +64,7 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+        if (Gate::denies('CREATE', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -80,7 +80,7 @@ class UsuarioController extends Controller
      */
     public function store(UsuarioRequest $request)
     {
-        if (!auth()->user()->hasPermission('CREATE', self::NICKNAME)) {
+        if (Gate::denies('CREATE', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -108,7 +108,7 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->hasPermission('READ', self::NICKNAME)) {
+        if (Gate::denies('READ', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -129,7 +129,7 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+        if (Gate::denies('UPDATE', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -152,7 +152,7 @@ class UsuarioController extends Controller
      */
     public function update(UsuarioRequest $request, $id)
     {
-        if (!auth()->user()->hasPermission('UPDATE', self::NICKNAME)) {
+        if (Gate::denies('UPDATE', self::NICKNAME)) {
             $this->denied();
         }
 
@@ -180,7 +180,7 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->hasPermission('DELETE', self::NICKNAME)) {
+        if (Gate::denies('DELETE', self::NICKNAME)) {
             $this->denied();
         }
 
