@@ -1,25 +1,3 @@
-<?php  $item = $item->toArray(); ?>
-<?php  $item['class'] = 'active'; ?>
-<?php  $item['href'] = "http://laraboard.tadeu/{$item['url']}"; ?>
-
-<?php
-    $url = "";
-    for ($i = 1; Request::segment($i) != null; $i++) {
-        $url .= Request::segment($i);
-
-        if (is_numeric(Request::segment(($i + 1)))) {
-            break;
-        }
-        if (Request::segment(($i + 1)) != null) {
-            $url .= '/';
-        }
-    }
-
-    if ($url != $item['url']) {
-        $item['class'] = '';
-    }
-?>
-
 @if(auth()->user()->hasPermission('READ', $item['nick_name']))
     @if (is_string($item))
         <li class="header">{{ $item }}</li>

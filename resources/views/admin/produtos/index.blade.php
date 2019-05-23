@@ -57,20 +57,20 @@
                     </thead>
                     <tbody>
                         @foreach ($produtos as $item)
-                            @if(auth()->user()->hasPermission('READ', 'Produto', $item))
+                            @canPermission('READ', 'Produto', $item)
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{$item->name}}</td>
                                     <td>{{$item->categoria->title}}</td>
                                     <td>{{$item->price}}</td>
                                     <td>
-                                        @can('UPDATE', 'Produto', $item)
+                                        @canPermission('UPDATE', 'Produto', $item)
                                             <a href="{{route('produtos.edit', $item->id)}}" class="badge bg-yellow">Editar</a>
-                                        @endcan
+                                        @endcanPermission
                                         <a href="{{route('produtos.show', $item->id)}}" class="badge bg-yellow">Visualizar</a>
                                     </td>
                                 </tr>
-                            @endif
+                            @endcanPermission
                         @endforeach
                     </tbody>
                 </table>
