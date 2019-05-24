@@ -23,9 +23,11 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
+        $id= $this->segment(3);
+
         return [
-            'name' => 'required',
-            'label' => 'required',
+            'name' => "required|max:50|unique:roles,name,{$id},id",
+            'label' => 'required|max:100',
         ];
     }
 

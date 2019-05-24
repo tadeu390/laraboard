@@ -56,4 +56,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
     Route::get('roles-permissions', 'ProdutoController@permissions');
 
+    Route::any('menus/search', 'MenuController@search')->name('menus.search');
+    Route::resource('menus', 'MenuController');
+    Route::get('menus/subMenus/create', 'MenuController@createSubMenu')->name('menus.createSubMenu');
+    Route::get('menus/subMenus/updateSubMenu/{$id}', 'MenuController@updateSubMenu')->name('menus.updateSubMenu');
+
 });
