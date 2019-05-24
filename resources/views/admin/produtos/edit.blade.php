@@ -6,7 +6,7 @@
     <h1>
         Editar produto
     </h1>
-    
+
     <ol class="breadcrumb">
         <li>
             <a href="{{route('admin')}}">Dashboard</a>

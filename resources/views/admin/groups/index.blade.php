@@ -21,9 +21,9 @@
                     @if(isset($data))
                         <a href="{{route('groups.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    @if (auth()->user()->hasPermission('DELETE', 'groups'))
+                    @canPermission('CREATE', 'groups')
                         <a href="{{route('groups.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
-                    @endif
+                    @endcanPermission
                 </form>
             </div>
         </div>
@@ -47,10 +47,10 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->label}}</td>
                                 <td class="text-right" id="acoes">
-                                    @if (auth()->user()->hasPermission('DELETE', 'groups'))
+                                    @canPermission('UPDATE', 'groups')
                                         <a href="{{route('groups.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
                                         &nbsp;&nbsp;&nbsp;
-                                    @endif
+                                    @endcanPermission
                                     <a href="{{route('groups.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="{{route('groups.showRoles', $item->id)}}" title="Funções"><i class="fa fa-address-card"></i></a>

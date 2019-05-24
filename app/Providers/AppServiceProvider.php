@@ -103,8 +103,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function customStatementAccessBlade()
     {
-        Blade::if('canPermission', function($permission, $module_name, $register) {
-            return auth()->user()->hasPermission($permission, $module_name, $register);
+        Blade::if('canPermission', function($permission, $module_name, $register = null) {
+            return Gate::allows($permission, [$module_name, $register]);
         });
     }
 }

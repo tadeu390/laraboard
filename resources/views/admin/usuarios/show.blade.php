@@ -58,13 +58,13 @@
                 </fieldset>
                 <br />
                 <div class="form-inline">
-                    @if (auth()->user()->hasPermission('DELETE', 'users'))
+                    @canPermission('DELETE', 'users')
                         <form action="{{route('usuarios.destroy', $usuario->id)}}" class="form" method="POST">
                             @csrf
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-danger">Deletar usuário</button>
                         </form>
-                    @endif
+                    @endcanPermission
                 </div>
             </div>
         </div>

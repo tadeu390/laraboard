@@ -21,9 +21,9 @@
                     @if(isset($data))
                         <a href="{{route('roles.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    @if (auth()->user()->hasPermission('CREATE', 'roles'))
+                    @canPermission('CREATE', 'roles')
                         <a href="{{route('roles.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
-                    @endif
+                    @endcanPermission
                 </form>
             </div>
         </div>
@@ -47,10 +47,10 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->label}}</td>
                                 <td class="text-right">
-                                    @if (auth()->user()->hasPermission('UPDATE', 'roles'))
+                                    @canPermission('UPDATE', 'roles')
                                         <a href="{{route('roles.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
                                         &nbsp;&nbsp;&nbsp;
-                                    @endif
+                                    @endcanPermission
                                     <a href="{{route('roles.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="{{route('roles.showPermissions', $item->id)}}" title="Permissões"><i class="fa fa-lock"></i></a>

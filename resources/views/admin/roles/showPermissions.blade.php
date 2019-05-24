@@ -12,7 +12,7 @@
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
                     <div class="form-group">
-                        <label for="name">Nome</label>
+                        <label for="name">Função</label>
                         <input readonly="readonly" type="text" id="name" value="{{$role->name ?? old('name')}}" name="name" class="form-control">
                     </div>
                     <fieldset class="p-2 border-fieldset">
