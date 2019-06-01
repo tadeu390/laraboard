@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Providers;
 
 use App\Repositories\Contracts\{
@@ -10,9 +9,9 @@ use App\Repositories\Contracts\{
     PermissionRepositoryInterface,
     ModuleRepositoryInterface,
     AccessRepositoryInterface,
-    GroupRepositoryInterface
+    GroupRepositoryInterface,
+    MenuRepositoryInterface
 };
-
 
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +23,8 @@ use App\Repositories\Core\{
     EloquentPermissionRepository,
     EloquentModuleRepository,
     EloquentAccessRepository,
-    EloquentGroupRepository
+    EloquentGroupRepository,
+    EloquentMenuRepository
 };
 
 /* use App\Repositories\Core\QueryBuilder\{
@@ -78,6 +78,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             GroupRepositoryInterface::class,
             EloquentGroupRepository::class
+        );
+
+        $this->app->bind(
+            MenuRepositoryInterface::class,
+            EloquentMenuRepository::class
         );
     }
 

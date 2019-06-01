@@ -23,8 +23,10 @@ class ModuleRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->segment(3);
+
         return [
-            'name' => 'required|max:100',
+            'name' => "required|max:100|unique:modules,name,{$id},id",
             'description' => 'required|max:100',
             'url' => 'required|max:100',
             'icon' => 'required|max:50',

@@ -93,7 +93,7 @@
 
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    @each('adminlte::partials.menu-item', $modules_menu->toArray(), 'item')
+                    @each('adminlte::partials.menu-item', $menus_system, 'item')
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>

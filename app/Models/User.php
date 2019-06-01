@@ -5,6 +5,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Permission;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -13,7 +14,16 @@ class User extends Authenticatable
     CONST NAO_DEFINIDO = 2;
     CONST DESATIVADO = 1;
 
+    use SoftDeletes;
     use Notifiable;
+
+    /**
+     * Table associated with this model
+     *
+     * @var array
+     */
+    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +32,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
+
+    /**
+     * Date type attributes
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -30,6 +48,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -39,11 +58,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Relationship
+     */
     public function roles()
     {
         return $this->belongsToMany(\App\Models\Role::class);
     }
 
+    /**
+     * Relationship
+     */
     public function groups()
     {
         return $this->belongsToMany(Group::class);
@@ -130,6 +155,14 @@ class User extends Authenticatable
         return $this->roles->contains('name', $roles);
     }
 
+    /**
+     * Verifica se o usuário que é dono do registro, está no mesmo grupo que o usuário logado
+     * que deseja obter uma determinada permissão. Isso é necessário para quando o nível de
+     * uma determinada permissão está definido como: Grupo.
+     *
+     * @param mixed $registro
+     * @return bool
+     */
     public function sameGroup($registro)
     {
         $groups_user_register = $this->find($registro->user_id)->groups;

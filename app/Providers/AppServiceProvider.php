@@ -5,10 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Categoria;
 use App\Models\AccessLevel;
-use App\Models\Module;
 use Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
+use App\Models\Menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -72,26 +72,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             '*',
             function ($view) {
-                $view->with('modules_menu', Module::where('id','>', 0)->get());
-
-                foreach ($view->modules_menu as $module) {
-                    $module['class'] = '';
-                    $module['href'] = url("{$module['url']}");
-                    $url = "";
-
-                    for ($i = 1; Request::segment($i) != null; $i++) {
-                        $url .= Request::segment($i);
-
-                        if (is_numeric(Request::segment(($i + 1)))) {
-                            break;
-                        }
-                        if (Request::segment(($i + 1)) != null) {
-                            $url .= '/';
-                        }
-                    }
-                    if($module['url'] == $url)
-                        $module['class'] = 'active';
-                }
+                $view->with('menus_system', Menu::whereNull('menu_id')->with('subMenus', 'modules')->get());
             }
         );
     }

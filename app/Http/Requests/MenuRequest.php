@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermissionRequest extends FormRequest
+class MenuRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,9 @@ class PermissionRequest extends FormRequest
         $id = $this->segment(3);
 
         return [
-            'name' => "required|max:50|unique:users,name,{$id},id",
-            'label' => 'required|max:100',
+            'name' => "required|max:50|unique:menus,name,{$id},id",
+            'description' => 'required|max:100',
+            'icon' => 'required|max:50',
         ];
     }
 
@@ -35,7 +36,8 @@ class PermissionRequest extends FormRequest
     {
         return [
             'name' => 'Nome',
-            'label' => 'Descrição',
+            'description' => 'Descrição',
+            'icon' => 'Ícone',
         ];
     }
 }

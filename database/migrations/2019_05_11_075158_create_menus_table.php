@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePermissionsTable extends Migration
+class CreateMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreatePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('menus', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 50);
-            $table->string('label', 100);
+            $table->string('description', 100);
+            $table->string('icon', 50);
+            $table->bigInteger('menu_id')->unsigned()->nullable();
+
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,7 +34,6 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permission_role');
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('menus');
     }
 }

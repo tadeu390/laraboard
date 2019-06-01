@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Permission extends Model
+class Menu extends Model
 {
     use SoftDeletes;
 
@@ -13,7 +14,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $table = 'permissions';
+    protected $table = 'menus';
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,7 @@ class Permission extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'label',
+        'name', 'description', 'icon'
     ];
 
     /**
@@ -34,17 +35,9 @@ class Permission extends Model
     /**
      * Relationship
      */
-    public function roles()
+    public function subMenus()
     {
-        return $this->belongsToMany(\App\Models\Role::class, 'accesses')->withPivot('access_level_id', 'module_id');
-    }
-
-    /**
-     * Relationship
-     */
-    public function access_levels()
-    {
-        return $this->belongsToMany(\App\Models\AccessLevel::class, 'accesses');
+        return $this->hasMany(Menu::class);
     }
 
     /**
@@ -52,6 +45,6 @@ class Permission extends Model
      */
     public function modules()
     {
-        return $this->belongsToMany(\App\Models\Module::class, 'accesses')->withPivot('access_level_id', 'module_id');
+        return $this->hasMany(Module::class);
     }
 }
