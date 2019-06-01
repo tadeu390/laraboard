@@ -9,6 +9,7 @@ use Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Menu;
+use App\Models\Module;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->listaAccessLevel();
         $this->mountMenu();
         $this->customStatementAccessBlade();
+        $this->modulePath();
     }
 
     /**
@@ -87,5 +89,64 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('canPermission', function($permission, $module_name, $register = null) {
             return Gate::allows($permission, [$module_name, $register]);
         });
+    }
+
+    /**
+     * Monta um array contendo em ordem hierárquica, o caminho para se encontrar o módulo que está exibido na tela.
+     * Isso é necessário para saber qual menu e quais submenus devem ficar abertos para que o usuário possa ver o módulo
+     * atual selecionado no menu.
+     */
+    public function modulePath()
+    {
+        $module = Module::where('url', $this->urlCurrentScreenModule())->with('menu')->get()->first();
+        if ($module != null) {
+            global $menus;
+            $menus = [];
+            function hierarquiaMenu($menu)
+            {
+                global $menus;
+                array_push($menus, $menu->name);
+
+                if ($menu->menu != null) {
+                    hierarquiaMenu($menu->menu);
+                }
+            }
+            hierarquiaMenu($module->menu);
+
+            view()->composer(
+                '*',
+                function ($view) use($menus){
+                    $view->with('module_path', $menus);
+                }
+            );
+        }
+    }
+
+    /**
+     * Retorna a url do módulo que se encontra na tela.
+     */
+    public function urlCurrentScreenModule()
+    {
+        $url = "";
+        $class = "class=active";
+        for ($i = 1; Request::segment($i) != null; $i++) {
+            $url .= Request::segment($i);
+
+            if (is_numeric(Request::segment(($i + 1)))) {
+                break;
+            }
+            if (Request::segment(($i + 1)) != null) {
+                $url .= '/';
+            }
+        }
+
+        view()->composer(
+            '*',
+            function ($view) use($url){
+                $view->with('url_browser', $url);
+            }
+        );
+
+        return $url;
     }
 }

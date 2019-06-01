@@ -43,6 +43,14 @@ class Menu extends Model
     /**
      * Relationship
      */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
+    /**
+     * Relationship
+     */
     public function modules()
     {
         return $this->hasMany(Module::class);

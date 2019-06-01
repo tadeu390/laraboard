@@ -31,4 +31,12 @@ class Module extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * Relationship
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }

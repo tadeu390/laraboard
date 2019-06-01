@@ -5,7 +5,11 @@
         <li class="header">{{ $item }}</li>
     @else
         <li  @if(count($item['subMenus']) > 0 || count($item['modules']) > 0)
-                class="{{$item['class']}}"
+                @if(in_array($item->name, $module_path))
+                    class="{{$item['class']}} menu-open"
+                @else
+                    class="{{$item['class']}}"
+                @endif
             @endif
         >
             <a href="{{ $item['href'] }}"
@@ -24,26 +28,19 @@
                 @endif
             </a>
 
-            <ul class="treeview-menu">
-                @if (count($item['modules']) > 0)
-                    @foreach ($item->modules as $module)
-
-                        <?php //http://laraboard.tadeu/{$item['url']}
+            <ul class="treeview-menu"
+                @if(in_array($item->name, $module_path))
+                    style="display: block;"
+                @endif
+            >
+                @foreach ($item->modules as $module)
+                    @canPermission('READ', $module->nick_name)
+                        <?php
                             $url = "";
                             $class = "class=active";
-                            for ($i = 1; Request::segment($i) != null; $i++) {
-                                $url .= Request::segment($i);
-
-                                if (is_numeric(Request::segment(($i + 1)))) {
-                                    break;
-                                }
-                                if (Request::segment(($i + 1)) != null) {
-                                    $url .= '/';
-                                }
-                            }
-
-                            if ($module->url != $url)
+                            if ($module->url != $url_browser) {
                                 $class = '';
+                            }
                         ?>
 
                         <li {{$class}}>
@@ -52,8 +49,8 @@
                                 <span>{{$module->name}}</span>
                             </a>
                         </li>
-                    @endforeach
-                @endif
+                    @endcanPermission
+                @endforeach
                 @if (count($item['subMenus']) > 0 || count($item['modules']) > 0)
                     @each('adminlte::partials.menu-item', $item['subMenus'], 'item')
                 @endif
