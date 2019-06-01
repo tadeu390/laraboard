@@ -21,45 +21,38 @@
                     @if(isset($data))
                         <a href="{{route('menus.index')}}" class="btn btn-warning">Limpar filtros</a>
                     @endif
-                    @if (auth()->user()->hasPermission('CREATE', 'menus'))
-                        <a href="{{route('menus.create')}}" class="btn btn-purple">Adicionar &nbsp; <i class="fa fa-plus-circle"></i></a>
-                    @endif
-                    @if (auth()->user()->hasPermission('CREATE', 'menus'))
-                        <a href="{{route('menus.createSubMenu')}}" class="btn btn-purple">Adicionar Sub Menu &nbsp; <i class="fa fa-plus-circle"></i></a>
-                    @endif
                 </form>
             </div>
         </div>
         <div class="box box-purple">
             @include('admin.includes.header')
+            <div class="row pr-2 pl-2">
+                    <div class="col-lg-10" id="formMenu">
+                        {{Form::open(['class' => 'form-inline'])}}
+                            <div class="form-group">
+                                    <label for="name">Nome</label><i class="p-2 fa fa-asterisk text-danger fa-required-size"></i>
+                                    <input type="text" id="name" value="{{$menu->name ?? old('name')}}" name="name" class="form-control">
+                            </div>
+                            <div class="form-group pl-2">
+                                <label for="description">Descrição</label><i class="p-2 fa fa-asterisk text-danger fa-required-size"></i>
+                                <input type="text" id="description" value="{{$menu->description ?? old('description')}}" name="description" class="form-control">
+                            </div>
+                            <div class="form-group pl-2">
+                                <button class="btn btn-purple" id="addFormMenu">Salvar</button>
+                            </div>
+                            <div class="form-group pl-2">
+                                <button class="btn btn-purple" id="addFormMenu">Cancelar</button>
+                            </div>
+                        {{Form::close()}}
+                    </div>
+                    <div class="col-lg-2 text-right">
+                        <button class="btn btn-purple" id="addFormMenu">Novo menu</button>
+                    </div>
+                </div>
             <div class="box-body">
                 @include('admin.includes.alerts')
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <td>#</td>
-                            <td>Nome</td>
-                            <td>Descrição</td>
-                            <td class="text-right">Ações</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($menus as $item)
-                            <tr>
-                                <td>{{$item->id}}</td>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->description}}</td>
-                                <td class="text-right">
-                                    @if (auth()->user()->hasPermission('UPDATE', 'menus'))
-                                        <a href="{{route('menus.edit', $item->id)}}" title="Editar"><i class="fa fa-edit"></i></a>
-                                        &nbsp;&nbsp;&nbsp;
-                                    @endif
-                                    <a href="{{route('menus.show', $item->id)}}" title="Visualizar"><i class="fa fa-info-circle"></i></a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @each('admin.menus._partials.menu-item', $menus, 'item')
+
                 <div class="row">
                     <div class="col-lg-12 text-right">
                         @if(isset($data))

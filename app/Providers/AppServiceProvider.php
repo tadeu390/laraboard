@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Categoria;
 use App\Models\AccessLevel;
-use App\Models\Module;
+use App\Models\Menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             '*',
             function ($view) {
-                $view->with('modules_menu', Module::where('id','>', 0)->get());
+                $view->with('menus_system', Menu::whereNull('menu_id')->with('subMenus', 'modules')->get());
             }
         );
     }

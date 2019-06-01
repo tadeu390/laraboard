@@ -20,7 +20,12 @@ class CreateModulesTable extends Migration
             $table->string('url', 100);
             $table->string('icon', 50);
             $table->string('nick_name', 100);
+            $table->bigInteger('menu_id')->unsigned()->nullable();
+
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('set null');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

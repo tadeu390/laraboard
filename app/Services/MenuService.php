@@ -27,7 +27,18 @@ class MenuService
      */
     public function index()
     {
-        return $this->repository->paginate(30);
+        $menus = $this->repository
+                ->findWhereNull('menu_id')
+                ->relationShips('subMenus', 'modules')
+                ->paginate(30);
+
+        //gambi temporária
+                foreach ($menus as $key => $item) {
+            if ($item->menu_id != null) {
+                unset($menus[$key]);
+            }
+        }
+        return $menus;
     }
 
     /**

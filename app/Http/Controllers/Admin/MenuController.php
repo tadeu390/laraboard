@@ -36,6 +36,7 @@ class MenuController extends Controller
         }
 
         $menus = $this->menu->index();
+
         $breadcrumb = $this->breadcrumb(['Menus']);
 
         return view('admin.menus.index', compact('menus', 'breadcrumb'));

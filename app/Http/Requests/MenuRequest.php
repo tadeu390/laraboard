@@ -28,6 +28,7 @@ class MenuRequest extends FormRequest
         return [
             'name' => "required|max:50|unique:menus,name,{$id},id",
             'description' => 'required|max:100',
+            'icon' => 'required|max:50',
         ];
     }
 
@@ -36,6 +37,7 @@ class MenuRequest extends FormRequest
         return [
             'name' => 'Nome',
             'description' => 'Descrição',
+            'icon' => 'Ícone',
         ];
     }
 }
