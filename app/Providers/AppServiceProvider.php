@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Menu;
 use App\Models\Module;
+use Illuminate\Support\Facades\Cookie;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             }
         );
 
-        $this->listaAccessLevel();
+        $this->listAccessLevel();
         $this->mountMenu();
         $this->customStatementAccessBlade();
         $this->modulePath();
@@ -51,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Monta uma lista contendo todos os níveis de acesso disponívies.
      */
-    public function listaAccessLevel()
+    public function listAccessLevel()
     {
         view()->composer(
             'admin.roles.*',
@@ -80,9 +81,9 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Cria diretiva de vericação personalizada para o blade.
-     * O intuito deste método é criar diretivas para vericação de permissões do usuário
-     * no sistema.
+     * Cria uma diretiva de vericação personalizada para o blade.
+     * O intuito deste método é criar uma diretiva para vericação de permissões do usuário
+     * no sistema a partir das views.
      */
     public function customStatementAccessBlade()
     {
@@ -102,16 +103,16 @@ class AppServiceProvider extends ServiceProvider
         if ($module != null) {
             global $menus;
             $menus = [];
-            function hierarquiaMenu($menu)
+            function searchMenus($menu)
             {
                 global $menus;
                 array_push($menus, $menu->name);
 
                 if ($menu->menu != null) {
-                    hierarquiaMenu($menu->menu);
+                    searchMenus($menu->menu);
                 }
             }
-            hierarquiaMenu($module->menu);
+            searchMenus($module->menu);
 
             view()->composer(
                 '*',
@@ -127,26 +128,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function urlCurrentScreenModule()
     {
-        $url = "";
-        $class = "class=active";
-        for ($i = 1; Request::segment($i) != null; $i++) {
-            $url .= Request::segment($i);
-
-            if (is_numeric(Request::segment(($i + 1)))) {
-                break;
-            }
-            if (Request::segment(($i + 1)) != null) {
-                $url .= '/';
-            }
+        $current_module = Cookie::get('current_module');
+        if ($current_module == null) {
+            $current_module = 'admin';
         }
-
         view()->composer(
             '*',
-            function ($view) use($url){
-                $view->with('url_browser', $url);
+            function ($view) use($current_module){
+                $view->with('url_browser', $current_module);
             }
         );
-
-        return $url;
+        return $current_module;
     }
 }

@@ -179,4 +179,14 @@ class GroupService
             ];
         }
     }
+
+    /**
+     * Retorna a quantidade de permissões.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->repository->getAll());
+    }
 }

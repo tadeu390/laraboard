@@ -152,16 +152,6 @@ class RoleService
     }
 
     /**
-     * Retorna a quantidade de funções.
-     *
-     * @return int
-     */
-    public function countRole()
-    {
-        return count($this->repository->getAll());
-    }
-
-    /**
      * Atualiza as permissões de uma função.
      *
      * @param array $data
@@ -207,5 +197,15 @@ class RoleService
                 'class' => get_class($e)
             ];
         }
+    }
+
+    /**
+     * Retorna a quantidade de funções.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->repository->getAll());
     }
 }

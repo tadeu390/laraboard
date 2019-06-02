@@ -42,9 +42,8 @@
                                 $class = '';
                             }
                         ?>
-
                         <li {{$class}}>
-                            <a href="{{url("{$module->url}")}}">
+                            <a href="{{url("{$module->url}")}}" onclick="createCookieModule('<?php  echo $module->url; ?>');">
                                 <i class="fa fa-fw fa-{{(empty($module->icon)) ? 'circle-o' : $module->icon }}"></i>
                                 <span>{{$module->name}}</span>
                             </a>
@@ -57,3 +56,11 @@
             </ul>
         </li>
     @endif
+
+    <script type="text/javascript">
+        function createCookieModule(url)
+        {
+            document.cookie = "current_module=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+            document.cookie = "current_module="+url+";path=/";
+        }
+    </script>

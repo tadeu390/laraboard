@@ -144,7 +144,7 @@ class PermissionService
      *
      * @return int
      */
-    public function countPermission()
+    public function count()
     {
         return count($this->repository->getAll());
     }

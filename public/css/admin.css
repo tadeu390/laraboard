@@ -62,7 +62,8 @@ a:hover{
     color: #555299;
 }
 
-#cardsDashboard .fa-users, #cardsDashboard .fa-address-card, #cardsDashboard .fa-check-circle
+#cardsDashboard .fa-users, #cardsDashboard .fa-address-card, #cardsDashboard .fa-check-circle, #cardsDashboard  .fa-bars,
+#cardsDashboard .fa-object-group, #cardsDashboard .fa-desktop
 {
     font-size: 100px;
     color: #605ca8;

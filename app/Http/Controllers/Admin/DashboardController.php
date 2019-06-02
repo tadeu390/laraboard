@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Services\{
     UsuarioService,
     RoleService,
-    PermissionService
+    PermissionService,
+    ModuleService,
+    GroupService,
+    MenuService
 };
 
 use App\Http\Controllers\Controller;
@@ -29,16 +32,36 @@ class DashboardController extends Controller
     private $permission;
 
     /**
+     * @var PermissionService
+     */
+    private $module;
+
+    /**
+     * @var PermissionService
+     */
+    private $group;
+
+    /**
+     * @var PermissionService
+     */
+    private $menu;
+    /**
      *  Carrega as instâncias das dependências desta classe.
      */
     public function __construct(
         UsuarioService $usuario,
         RoleService $role,
-        PermissionService $permission
+        PermissionService $permission,
+        ModuleService $module,
+        GroupService $group,
+        MenuService $menu
     ) {
         $this->usuario = $usuario;
         $this->role = $role;
         $this->permission = $permission;
+        $this->module = $module;
+        $this->group = $group;
+        $this->menu = $menu;
     }
 
     /**
@@ -49,9 +72,12 @@ class DashboardController extends Controller
     public function index()
     {
         $report = new \stdClass;
-        $report->users = $this->usuario->countUser();
-        $report->roles = $this->role->countRole();
-        $report->permissions = $this->permission->countPermission();
+        $report->users = $this->usuario->count();
+        $report->roles = $this->role->count();
+        $report->permissions = $this->permission->count();
+        $report->modules = $this->module->count();
+        $report->groups = $this->group->count();
+        $report->menus = $this->menu->count();
 
         return view('admin.dashboard.index', compact('report'));
     }

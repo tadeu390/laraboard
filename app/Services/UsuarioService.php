@@ -141,16 +141,6 @@ class UsuarioService
     }
 
     /**
-     * Retorna a quantidade de usuários.
-     *
-     * @return int
-     */
-    public function countUser()
-    {
-        return count($this->repository->getAll());
-    }
-
-    /**
      * Atualiza as funções de um usuário.
      *
      * @param array $data
@@ -210,5 +200,15 @@ class UsuarioService
                 'class' => get_class($e)
             ];
         }
+    }
+
+    /**
+     * Retorna a quantidade de usuários.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->repository->getAll());
     }
 }
