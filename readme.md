@@ -9,6 +9,7 @@
 <p>O sistema vem com os seguintes módulos que permitem com que o usuário administrador tenha total controle do sistema:</p>
 <ul>
     <li>Módulos</li>
+    <li>Menus</li>
     <li>Permissões</li>
     <li>Funções</li>
     <li>Grupos</li>
@@ -23,6 +24,11 @@
 <p>
     Este módulo é a fábrica de módulos, ou seja, você pode adicionar quantos módulos forem necessários. Ao adicionar um novo módulo, o mesmo ficará disponível para acesso através do menu. A lista especificada acima é criada a partir deste módulo.
     Os módulos podem ser editados e apagados, ou seja, tudo gerenciado pela interface do Laraboard. Tome muito cuidado ao apagar um módulo, pois este além de remover tal registro da base de dados, também irá remover todo o código fonte criado para o mesmo.
+</p>
+
+### Menus
+<p>
+Este módulo permite ao usuário organizar o menu lateral da maneira que mais lhe agradar. Pode, criar menus e submenus (o nível de profundidade é ilimitado, ficando assim a escolha do usuário). Aqui é possível além de criar menus e submenus, também adicionar e visualizar os módulos em cada menu/submenu, de maneira simples e intuitiva.
 </p>
 
 ### Permissões
