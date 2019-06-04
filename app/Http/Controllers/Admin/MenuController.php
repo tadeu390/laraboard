@@ -6,6 +6,8 @@ use App\Http\Requests\MenuRequest;
 use App\Services\MenuService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Response;
+use App\Services\ModuleService;
 
 class MenuController extends Controller
 {
@@ -49,13 +51,15 @@ class MenuController extends Controller
      */
     public function create()
     {
-        if (Gate::denies('CREATE', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('CREATE', self::NICKNAME)) {
+            $reponse = view('admin.menus._partials.form')->render();
         }
 
-        $breadcrumb = $this->breadcrumb(['Menus', 'Novo']);
-
-        return view('admin.menus.create', compact('breadcrumb'));
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
     }
 
     /**
@@ -64,44 +68,18 @@ class MenuController extends Controller
      * @param  \Illuminate\Http\Requests\RoleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MenuRequest $request)
+    public function store(Request $request)
     {
-        if (Gate::denies('CREAte', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('CREATE', self::NICKNAME)) {
+            $service = $this->menu->store($request->all());
+            $reponse = "ok";
         }
 
-        $service = $this->menu->store($request->all());
-
-        if (!$service->success) {
-            return redirect()->route('menus.create')
-                ->with('error', [
-                    'class' => $service->class,
-                    'message' => $service->message
-                ])
-                ->withInput();
-        }
-
-        return redirect()
-                        ->route('menus.index')
-                        ->withSuccess($service->message);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        if (Gate::denies('READ', self::NICKNAME)) {
-            $this->denied();
-        }
-
-        $menu = $this->menu->show($id);
-        $breadcrumb = $this->breadcrumb(['Menus', 'Visualizar']);
-
-        return view('admin.menus.show', compact('menu', 'breadcrumb'));
+        return Response::json(array(
+            'success' => true,
+            'content' => $reponse,
+        ));
     }
 
     /**
@@ -112,14 +90,16 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        if (Gate::denies('UPDATE', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('UPDATE', self::NICKNAME)) {
+            $menu = $this->menu->edit($id);
+            $reponse = view('admin.menus._partials.form', compact('menu'))->render();
         }
 
-        $menu = $this->menu->edit($id);
-        $breadcrumb = $this->breadcrumb(['Menus', 'Editar', $menu->name]);
-
-        return view('admin.menus.edit', compact('breadcrumb', 'menu'));
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
     }
 
     /**
@@ -131,24 +111,16 @@ class MenuController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
-        if (Gate::denies('UPDATE', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('UPDATE', self::NICKNAME)) {
+            $service = $this->menu->update($id, $request->all());
+            $reponse = "ok";
         }
 
-        $service = $this->menu->update($id, $request->all());
-
-        if (!$service->success) {
-            return redirect()->route('menus.edit', $id)
-                    ->with('error', [
-                        'class' => $service->class,
-                        'message' => $service->message
-                    ])
-                    ->withInput();
-        }
-
-        return redirect()
-                        ->route("menus.index")
-                        ->withSuccess($service->message);
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
     }
 
     /**
@@ -159,39 +131,77 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        if (Gate::denies('DELETE', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('DELETE', self::NICKNAME)) {
+            $service = $this->menu->delete($id);
+            $reponse = "Ok";
         }
 
-        $service = $this->menu->delete($id);
-
-        if (!$service->success) {
-            return redirect()->route('menus.show', $id)
-                    ->with('error', [
-                        'class' => $service->class,
-                        'message' => $service->message
-                    ])
-                    ->withInput();
-        }
-
-        return redirect()
-                        ->route('menus.index')
-                        ->withSuccess($service->message);
+        return Response::json(array(
+            'success' => true,
+            'content' => $reponse,
+        ));
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param int $menu_id -> Menu que receberá um novo sub menu.
      * @return \Illuminate\Http\Response
      */
-    public function createSubMenu()
+    public function createSubmenu($menu_id)
     {
-        if (Gate::denies('CREATE', self::NICKNAME)) {
-            $this->denied();
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('CREATE', self::NICKNAME)) {
+            $menus = $this->menu->combo();
+            $reponse = view('admin.menus._partials.formSubmenu', ['menus' => $menus, 'menu_id' => $menu_id])->render();
         }
 
-        $breadcrumb = $this->breadcrumb(['Menus', 'Novo Sub Menu']);
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
+    }
 
-        return view('admin.menus.submenus.create', compact('breadcrumb'));
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param int $sub_menu_id
+     * @return \Illuminate\Http\Response
+     */
+    public function editSubmenu($sub_menu_id)
+    {
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('UPDATE', self::NICKNAME)) {
+            $menus = $this->menu->combo();
+            $submenu = $this->menu->edit($sub_menu_id);
+            $reponse = view('admin.menus._partials.formSubmenu', ['menus' => $menus, 'menu' => $submenu, 'menu_id' => $submenu->menu->id])->render();
+        }
+
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param int $menu_id
+     * @return \Illuminate\Http\Response
+     */
+    public function addModule($menu_id, ModuleService $module)
+    {
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        if (Gate::allows('CREATE', self::NICKNAME)) {
+            $modules = $module->getAll();
+            $menus = $this->menu->combo();
+            $reponse = view('admin.menus._partials.addModules', [ 'menus' => $menus, 'modules' => $modules, 'menu_id' => $menu_id])->render();
+        }
+
+        return Response::json(array(
+            'success' => true,
+            'content'   => $reponse,
+        ));
     }
 }

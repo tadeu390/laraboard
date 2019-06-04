@@ -42,6 +42,19 @@ class MenuService
     }
 
     /**
+     * Retorna os dados de forma específica para o combo box de famílimas de materiais.
+     *
+     */
+    public function combo()
+    {
+        foreach ($this->repository->getAll() as $menu) {
+            $opcoes[$menu->id] = $menu->name;
+        }
+
+        return (object) $opcoes;
+    }
+
+    /**
      * Retorna os dados do registro
      *
      * @param  integer $id

@@ -22,7 +22,7 @@ class Menu extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'icon'
+        'name', 'description', 'icon', 'menu_id'
     ];
 
     /**

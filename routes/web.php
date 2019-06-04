@@ -58,7 +58,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
     Route::any('menus/search', 'MenuController@search')->name('menus.search');
     Route::resource('menus', 'MenuController');
-    Route::get('menus/subMenus/create', 'MenuController@createSubMenu')->name('menus.createSubMenu');
-    Route::get('menus/subMenus/updateSubMenu/{$id}', 'MenuController@updateSubMenu')->name('menus.updateSubMenu');
-
+    Route::get('menus/createSubmenu/{menu_id}', 'MenuController@createSubmenu')->name('menus.createSubmenu');
+    Route::get('menus/{submenu_id}/editSubmenu', 'MenuController@editSubmenu')->name('menus.editSubmenu');
+    Route::get('menus/addModule/{menu_id}', 'MenuController@addModule')->name('menus.addModule');
+    Route::get('menus/updateSubmenu/{submenu_id}', 'MenuController@updateSubmenu')->name('menus.updateSubmenu');
 });
