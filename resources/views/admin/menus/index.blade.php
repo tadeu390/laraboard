@@ -46,7 +46,7 @@
                         {{Form::close()}} --}}
                     </div>
                     <div class="col-lg-2 text-right">
-                        <button class="btn btn-purple" id="addFormMenu" onclick="Menu.addMenu();" >Novo menu</button>
+                        <button class="btn btn-purple" id="addFormMenu" onclick="Menu.addMenu(0);" >Novo menu</button>
                     </div>
                 </div>
             <div class="box-body" id="indexMenu">
@@ -104,8 +104,9 @@
                     <input type="hidden" name="_method" value="DELETE">
                 </form>
             </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Menu.confirmRemoveMenu();">Deletar</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="bt_remove_confirm" data-dismiss="modal">Sim</button>
+                <button type="button" id="bt_remove" class="btn btn-purple" data-dismiss="modal" data-dismiss="modal">Não</button>
             </div>
         </div>
     </div>
@@ -131,16 +132,21 @@
                     elClone = el.cloneNode(true);
 
                 el.parentNode.replaceChild(elClone, el);
+
+                var el = document.getElementById('bt_remove_confirm'),
+                    elClone = el.cloneNode(true);
+
+                el.parentNode.replaceChild(elClone, el);
             },
-            addMenu : function ()
+            addMenu : function (menu_id)
             {
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Novo menu');
                 Menu.removeEventListener();
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/create/");
+                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/create/" + menu_id);
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
                     if (Menu.menuValidate()) {
-                        Menu.saveMenu("http://laraboard.tadeu/admin/menus");
+                        Menu.save("http://laraboard.tadeu/admin/menus");
                     }
                 });
             },
@@ -153,32 +159,7 @@
                 Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/" + menu_id + "/edit");
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
                     if (Menu.menuValidate()) {
-                        Menu.saveMenu("http://laraboard.tadeu/admin/menus/" + menu_id);
-                    }
-                });
-            },
-            addSubmenu : function (menu_id)
-            {
-                $('#modal_module_menu').modal("show");
-                $("#module_menuLabel").html('Novo submenu');
-                Menu.removeEventListener();
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/createSubmenu/" + menu_id);
-                document.getElementById('bt_salvar_modal').addEventListener('click', function(){
-                    if (Menu.menuValidate()) {
-                        Menu.saveMenu("http://laraboard.tadeu/admin/menus");
-                    }
-                });
-            },
-            editSubmenu: function(menu_id)
-            {
-                $('#modal_module_menu').modal("show");
-                $("#module_menuLabel").html('Editar Sub menu');
-                Menu.removeEventListener();
-                Menu.update = true;
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/" + menu_id + "/editSubmenu");
-                document.getElementById('bt_salvar_modal').addEventListener('click', function(){
-                    if (Menu.menuValidate()) {
-                        Menu.saveMenu("http://laraboard.tadeu/admin/menus/" + menu_id);
+                        Menu.save("http://laraboard.tadeu/admin/menus/" + menu_id);
                     }
                 });
             },
@@ -188,6 +169,15 @@
                 $("#modal_remove_body").html("Deseja realmente apagar o menu <b>" + name + "</b>?");
                 $('#modal_remove').modal("show");
                 $("#modal_remove_label").html('Apagar menu');
+                Menu.removeEventListener();
+
+                document.getElementById('bt_remove_confirm').addEventListener('click', function(){
+                    Menu.confirmRemoveMenu();
+                });
+
+                setTimeout(function(){
+                    $("#bt_remove").focus();
+                },500);
                 Menu.menu_id = menu_id;
             },
             confirmRemoveMenu : function()
@@ -198,35 +188,74 @@
                     type: 'POST',
                     data: serializeDados,
                     success: function(data, textStatus) {
-                        location.reload();
+                        if (!data.success) {
+                            alert(data.content);
+                        } else {
+                            location.reload();
+                        }
                     },
                     error: function(xhr,er) {
                         alert('Houve um erro ao processar sua requisição.');
                     }
                 });
             },
-            removeSubmenu : function(menu_id, name)
-            {
-                $("#modal_remove_body").html("Deseja realmente apagar o submenu <b>" + name + "</b>?");
-                $('#modal_remove').modal("show");
-                $("#modal_remove_label").html('Apagar submenu');
-                Menu.menu_id = menu_id;
-            },
-            moveSubmenu : function(menu_id)
-            {
-                $('#modal_module_menu').modal("show");
-                $("#module_menuLabel").html('Mover submenu');
-            },
             addModule : function(menu_id)//menu ou submenu
             {
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Adicionar módulo');
+                Menu.removeEventListener();
                 Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/addModule/" + menu_id);
+
+                document.getElementById('bt_salvar_modal').addEventListener('click', function(){
+                    if (Menu.moduleValidate()) {
+                        Menu.save("http://laraboard.tadeu/admin/menus/saveModules");
+                    }
+                });
+            },
+            module_id : 0,
+            removeModule : function (module_id)
+            {
+                $("#modal_remove_body").html("Deseja realmente remover o módulo <b>" + name + "</b> deste menu?");
+                $('#modal_remove').modal("show");
+                $("#modal_remove_label").html('Remover módulo');
+                Menu.removeEventListener();
+
+                document.getElementById('bt_remove_confirm').addEventListener('click', function(){
+                    Menu.confirmRemoveModule();
+                });
+
+                setTimeout(function(){
+                    $("#bt_remove").focus();
+                },500);
+                Menu.module_id = module_id;
+            },
+            confirmRemoveModule : function ()
+            {
+                $.ajax({
+                    url: "http://laraboard.tadeu/admin/menus/removeModule/" + Menu.module_id,
+                    type: 'GET',
+                    success: function(data, textStatus) {
+                        if (!data.success) {
+                            alert(data.content);
+                        } else {
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr,er) {
+                        alert('Houve um erro ao processar sua requisição.');
+                    }
+                });
             },
             moveModule : function (module_id)
             {
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Mover módulo');
+                Menu.removeEventListener();
+                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/moveModule/" + module_id);
+
+                document.getElementById('bt_salvar_modal').addEventListener('click', function(){
+                    Menu.save("http://laraboard.tadeu/admin/menus/saveMoveModule/");
+                });
             },
             /**
             * Carrega o formulário para adicionar novos menus.
@@ -267,7 +296,15 @@
                 }
                 return true;
             },
-            saveMenu : function(url)
+            moduleValidate : function()
+            {
+                var checado = $("#module_menu_body").find("input[name='modules[]']:checked").length > 0;
+                if (checado == false) {
+                    alert('Selecione ao menos um módulo para adicionar.');
+                }
+                return checado;
+            },
+            save : function(url)
             {
                 var serializeDados = $('#module_menu_body').serialize();
                 $.ajax({
@@ -275,7 +312,11 @@
                     type: 'POST',
                     data: serializeDados,
                     success: function(data, textStatus) {
-                        location.reload();
+                        if (!data.success) {
+                            alert(data.content);
+                        } else {
+                            location.reload();
+                        }
                     },
                     error: function(xhr,er) {
                         alert('Houve um erro ao processar sua requisição.');

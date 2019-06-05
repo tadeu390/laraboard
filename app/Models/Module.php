@@ -22,7 +22,7 @@ class Module extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'url', 'icon', 'nick_name',
+        'name', 'description', 'url', 'icon', 'nick_name', 'menu_id',
     ];
 
     /**

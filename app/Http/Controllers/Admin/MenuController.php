@@ -47,17 +47,21 @@ class MenuController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param int $menu_id
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($menu_id)
     {
         $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('CREATE', self::NICKNAME)) {
-            $reponse = view('admin.menus._partials.form')->render();
+            $menus = $this->menu->combo();
+            $reponse = view('admin.menus._partials.form', ['menus' => $menus, 'menu_id' => $menu_id])->render();
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
+            'success' => $success,
             'content'   => $reponse,
         ));
     }
@@ -71,13 +75,15 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('CREATE', self::NICKNAME)) {
             $service = $this->menu->store($request->all());
             $reponse = "ok";
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
+            'success' => $success,
             'content' => $reponse,
         ));
     }
@@ -91,13 +97,20 @@ class MenuController extends Controller
     public function edit($id)
     {
         $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('UPDATE', self::NICKNAME)) {
             $menu = $this->menu->edit($id);
-            $reponse = view('admin.menus._partials.form', compact('menu'))->render();
+            $menus = $this->menu->combo($id);
+            $menu_id = null;
+            if ($menu->menu != null) {
+                $menu_id = $menu->menu->id;
+            }
+            $reponse = view('admin.menus._partials.form', compact('menu', 'menus', 'menu_id'))->render();
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
+            'success' => $success,
             'content'   => $reponse,
         ));
     }
@@ -109,16 +122,18 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MenuRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('UPDATE', self::NICKNAME)) {
             $service = $this->menu->update($id, $request->all());
             $reponse = "ok";
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
+            'success' => $success,
             'content'   => $reponse,
         ));
     }
@@ -131,56 +146,17 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        $reponse = "Você não tem permissão para realizar esta ação.";
+        $response = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('DELETE', self::NICKNAME)) {
             $service = $this->menu->delete($id);
-            $reponse = "Ok";
+            $response = "ok";
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
-            'content' => $reponse,
-        ));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param int $menu_id -> Menu que receberá um novo sub menu.
-     * @return \Illuminate\Http\Response
-     */
-    public function createSubmenu($menu_id)
-    {
-        $reponse = "Você não tem permissão para realizar esta ação.";
-        if (Gate::allows('CREATE', self::NICKNAME)) {
-            $menus = $this->menu->combo();
-            $reponse = view('admin.menus._partials.formSubmenu', ['menus' => $menus, 'menu_id' => $menu_id])->render();
-        }
-
-        return Response::json(array(
-            'success' => true,
-            'content'   => $reponse,
-        ));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param int $sub_menu_id
-     * @return \Illuminate\Http\Response
-     */
-    public function editSubmenu($sub_menu_id)
-    {
-        $reponse = "Você não tem permissão para realizar esta ação.";
-        if (Gate::allows('UPDATE', self::NICKNAME)) {
-            $menus = $this->menu->combo();
-            $submenu = $this->menu->edit($sub_menu_id);
-            $reponse = view('admin.menus._partials.formSubmenu', ['menus' => $menus, 'menu' => $submenu, 'menu_id' => $submenu->menu->id])->render();
-        }
-
-        return Response::json(array(
-            'success' => true,
-            'content'   => $reponse,
+            'success' => $success,
+            'content' => $response,
         ));
     }
 
@@ -193,15 +169,103 @@ class MenuController extends Controller
     public function addModule($menu_id, ModuleService $module)
     {
         $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
         if (Gate::allows('CREATE', self::NICKNAME)) {
             $modules = $module->getAll();
             $menus = $this->menu->combo();
             $reponse = view('admin.menus._partials.addModules', [ 'menus' => $menus, 'modules' => $modules, 'menu_id' => $menu_id])->render();
+            $success = true;
         }
 
         return Response::json(array(
-            'success' => true,
+            'success' => $success,
             'content'   => $reponse,
+        ));
+    }
+
+    /**
+     * Save modules selecteds.
+     *
+     * @param  \Illuminate\Http\Requests $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveModules(Request $request)
+    {
+        $response = "";
+        $result = $this->menu->saveModules($request);
+
+        if (!$result->success) {
+            $response = "Ocorreu um erro ao processar sua requisição.";
+        }
+
+        return Response::json(array(
+            'success' => $result->success,
+            'content'   => $response,
+        ));
+    }
+
+    /**
+     * Remove module from menu.
+     *
+     * @param int $module_id
+     * @return \Illuminate\Http\Response
+     */
+    public function removeModule($module_id)
+    {
+        $response = "";
+        $result = $this->menu->removeModule($module_id);
+
+        if (!$result->success) {
+            $response = "Ocorreu um erro ao processar sua requisição.";
+        }
+
+        return Response::json(array(
+            'success' => $result->success,
+            'content'   => $response,
+        ));
+    }
+
+    /**
+     * Load form to move module.
+     *
+     * @param  int $module_id
+     * @return \Illuminate\Http\Response
+     */
+    public function moveModule($module_id, ModuleService $module)
+    {
+        $reponse = "Você não tem permissão para realizar esta ação.";
+        $success = false;
+        if (Gate::allows('CREATE', self::NICKNAME)) {
+            $module = $module->show($module_id);
+            $menus = $this->menu->combo(-1);
+            $reponse = view('admin.menus._partials.moveModule', [ 'menus' => $menus, 'module' => $module, 'menu_id' => $module->menu_id])->render();
+            $success = true;
+        }
+
+        return Response::json(array(
+            'success' => $success,
+            'content'   => $reponse,
+        ));
+    }
+
+    /**
+     * Move module for other menu.
+     *
+     * @param  \Illuminate\Http\Requests $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveMoveModule(Request $request)
+    {
+        $response = "";
+        $result = $this->menu->saveMoveModule($request);
+
+        if (!$result->success) {
+            $response = "Ocorreu um erro ao processar sua requisição.";
+        }
+
+        return Response::json(array(
+            'success' => $result->success,
+            'content'   => $response,
         ));
     }
 }

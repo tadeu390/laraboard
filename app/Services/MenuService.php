@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repositories\Contracts\MenuRepositoryInterface;
 use Illuminate\Http\Request;
 use Mockery\CountValidator\Exception;
+use App\Repositories\Contracts\ModuleRepositoryInterface;
 
 class MenuService
 {
@@ -13,11 +14,17 @@ class MenuService
     protected $repository;
 
     /**
+     * @var ModuleRepositoryInterface
+     */
+    protected $module;
+
+    /**
      * Carrega as instâncias das dependências desta classe.
      */
-    public function __construct(MenuRepositoryInterface $repository)
+    public function __construct(MenuRepositoryInterface $repository, ModuleRepositoryInterface $module)
     {
         $this->repository = $repository;
+        $this->module = $module;
     }
 
     /**
@@ -42,13 +49,37 @@ class MenuService
     }
 
     /**
-     * Retorna os dados de forma específica para o combo box de famílimas de materiais.
+     * Retorna os dados de forma específica para o combo box de menu. Para o menu em questão,
+     * ou seja, o menu da id informada no segundo parâmetro, não são mostrados os menus filhos.
      *
      */
-    public function combo()
+    public function combo($id = null)
     {
+        if ($id != -1) {
+            $opcoes[''] = 'Selecione';
+        }
+
+        global $flag;
+        $flag = false;
+
+        function menuPai($menu, $id)
+        {
+            global $flag;
+            if ($menu->menu_id == $id) {
+                $flag = true;
+            } else if ($menu->menu != null) {
+                menuPai($menu->menu, $id);
+            }
+        }
+
         foreach ($this->repository->getAll() as $menu) {
-            $opcoes[$menu->id] = $menu->name;
+            if ($id != null) {
+                menuPai($menu, $id);
+            }
+            if (!$flag && $menu->id != $id) {
+                $opcoes[$menu->id] = $menu->name;
+            }
+            $flag = false;
         }
 
         return (object) $opcoes;
@@ -136,8 +167,14 @@ class MenuService
     public function delete($id)
     {
         try {
-            $this->repository->delete($id);
-
+            $menu = $this->repository->findById($id);
+            if ($menu) {
+                foreach ($menu->modules as $module) {
+                    $module->menu_id = null;
+                    $this->saveMoveModule($module);
+                }
+                $this->repository->delete($id);
+            }
             return (object) [
                 'success' => true,
                 'message' => 'Menu apagado com sucesso.'
@@ -172,5 +209,85 @@ class MenuService
     public function count()
     {
         return count($this->repository->getAll());
+    }
+
+    /**
+     * Save modules in database.
+     *
+     * @param mixed $data
+     * @return object mixed
+     */
+    public function saveModules($data)
+    {
+        foreach ($data->modules as $item) {
+            try {
+                $module = $this->module->findById($item);
+                $module->menu_id = $data->menu_id;
+                $this->module->update($module->id, $module->toArray());
+            } catch(\Exception $e) {
+                return (object) [
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'class' => get_class($e)
+                ];
+            }
+        }
+
+        return (object) [
+            'success' => true,
+            'message' => 'Módulo(s) adicionado(s) com sucesso.'
+        ];
+    }
+
+    /**
+     * Remove module from menu.
+     *
+     * @param int $module_id
+     * @return object mixed
+     */
+    public function removeModule($module_id)
+    {
+        try {
+            $module = $this->module->findById($module_id);
+            $module->menu_id = null;
+            $this->module->update($module_id, $module->toArray());
+
+            return (object) [
+                'success' => true,
+                'message' => 'Módulo removido com sucesso.'
+            ];
+        } catch(\Exception $e) {
+            return (object) [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'class' => get_class($e)
+            ];
+        }
+    }
+
+    /**
+     * Move module for other menu.
+     *
+     * @param mixed $data
+     * @return object mixed
+     */
+    public function saveMoveModule($data)
+    {
+        try {
+            $module = $this->module->findById($data->id);
+            $module->menu_id = $data->menu_id;
+            $this->module->update($data->id, $module->toArray());
+
+            return (object) [
+                'success' => true,
+                'message' => 'Módulo movido com sucesso.'
+            ];
+        } catch(\Exception $e) {
+            return (object) [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'class' => get_class($e)
+            ];
+        }
     }
 }
