@@ -7,6 +7,7 @@ use App\Repositories\Exceptions\NotEntityDefined;
 class BaseEloquentRepository implements RepositoryInterface
 {
     protected $entity;
+    protected $column_null = null;
 
     public function __construct()
     {
@@ -32,7 +33,7 @@ class BaseEloquentRepository implements RepositoryInterface
 
     public function findWhereNull($column)
     {
-        $this->entity->whereNull($column)->get();
+        $this->column_null = $column;
 
         return $this;
     }
@@ -44,7 +45,12 @@ class BaseEloquentRepository implements RepositoryInterface
 
     public function paginate($totalPage = 10)
     {
-        return $this->entity->paginate($totalPage);
+        return $this->entity->where(function($query) {
+            $query->get();
+            if ($this->column_null != null) {
+                $query->whereNull($this->column_null);
+            }
+        })->paginate($totalPage);
     }
 
     public function store(array $data)

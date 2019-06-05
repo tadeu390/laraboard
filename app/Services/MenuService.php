@@ -38,13 +38,6 @@ class MenuService
                 ->findWhereNull('menu_id')
                 ->relationShips('subMenus', 'modules')
                 ->paginate(30);
-
-        //gambi temporária
-                foreach ($menus as $key => $item) {
-            if ($item->menu_id != null) {
-                unset($menus[$key]);
-            }
-        }
         return $menus;
     }
 
