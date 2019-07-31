@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->bigInteger('group_id')->unsigned();
 
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

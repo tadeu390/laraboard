@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Categoria;
 use App\Models\AccessLevel;
-use Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Menu;
@@ -99,7 +98,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function modulePath()
     {
-        $module = Module::where('url', $this->urlCurrentScreenModule())->with('menu')->get()->first();
+        $module = app()->runningInConsole() ? [] : Module::where('url', $this->urlCurrentScreenModule())->with('menu')->get()->first();
+
         if ($module != null) {
             global $menus;
             $menus = [];

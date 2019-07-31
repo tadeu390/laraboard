@@ -69,9 +69,9 @@ class User extends Authenticatable
     /**
      * Relationship
      */
-    public function groups()
+    public function group()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsTo(Group::class);
     }
 
     /**
@@ -106,7 +106,7 @@ class User extends Authenticatable
             return $permission_return;
         } else {
             $group = new Group();
-            return $group->hasAnyRoles($permission->roles, $this->groups, $module->id, $registro);
+            return $group->hasAnyRoles($permission->roles, $this->group, $module->id, $registro);
         }
     }
 

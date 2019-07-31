@@ -124,6 +124,7 @@
 
     var Menu =
         {
+            url : "http://localhost/admin/",
             update : false,
             removeEventListener : function()
             {
@@ -143,10 +144,10 @@
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Novo menu');
                 Menu.removeEventListener();
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/create/" + menu_id);
+                Menu.loadFormMenu(Menu.url + "menus/create/" + menu_id);
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
                     if (Menu.menuValidate()) {
-                        Menu.save("http://laraboard.tadeu/admin/menus");
+                        Menu.save(Menu.url + "menus");
                     }
                 });
             },
@@ -156,10 +157,10 @@
                 $("#module_menuLabel").html('Editar menu');
                 Menu.removeEventListener();
                 Menu.update = true;
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/" + menu_id + "/edit");
+                Menu.loadFormMenu(Menu.url + "menus/" + menu_id + "/edit");
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
                     if (Menu.menuValidate()) {
-                        Menu.save("http://laraboard.tadeu/admin/menus/" + menu_id);
+                        Menu.save(Menu.url + "menus/" + menu_id);
                     }
                 });
             },
@@ -184,7 +185,7 @@
             {
                 var serializeDados = $('#modal_form_remove_body').serialize();
                 $.ajax({
-                    url: "http://laraboard.tadeu/admin/menus/" + Menu.menu_id,
+                    url: Menu.url + "menus/" + Menu.menu_id,
                     type: 'POST',
                     data: serializeDados,
                     success: function(data, textStatus) {
@@ -204,11 +205,11 @@
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Adicionar módulo');
                 Menu.removeEventListener();
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/addModule/" + menu_id);
+                Menu.loadFormMenu(Menu.url + "menus/addModule/" + menu_id);
 
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
                     if (Menu.moduleValidate()) {
-                        Menu.save("http://laraboard.tadeu/admin/menus/saveModules");
+                        Menu.save(Menu.url + "menus/saveModules");
                     }
                 });
             },
@@ -232,7 +233,7 @@
             confirmRemoveModule : function ()
             {
                 $.ajax({
-                    url: "http://laraboard.tadeu/admin/menus/removeModule/" + Menu.module_id,
+                    url: Menu.url + "menus/removeModule/" + Menu.module_id,
                     type: 'GET',
                     success: function(data, textStatus) {
                         if (!data.success) {
@@ -251,10 +252,10 @@
                 $('#modal_module_menu').modal("show");
                 $("#module_menuLabel").html('Mover módulo');
                 Menu.removeEventListener();
-                Menu.loadFormMenu("http://laraboard.tadeu/admin/menus/moveModule/" + module_id);
+                Menu.loadFormMenu(Menu.url + "menus/moveModule/" + module_id);
 
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
-                    Menu.save("http://laraboard.tadeu/admin/menus/saveMoveModule/");
+                    Menu.save(Menu.url + "menus/saveMoveModule/");
                 });
             },
             /**

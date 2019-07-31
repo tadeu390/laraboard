@@ -60,9 +60,9 @@ class Group extends Model
      */
     public function hasAnyRoles($roles, $groups, $module_id, $registro)
     {
-        foreach ($groups as $group) {
+       // foreach ($groups as $group) {
             foreach ($roles as $role) {
-                if ($group->roles->contains('name', $role->name) && $role->pivot->access_level_id != User::DESATIVADO &&
+                if ($groups->roles->contains('name', $role->name) && $role->pivot->access_level_id != User::DESATIVADO &&
                         $role->pivot->module_id == $module_id
                     ) {
 
@@ -85,7 +85,7 @@ class Group extends Model
                     return true;
                 }
             }
-        }
+       // }
         return false;
     }
 }

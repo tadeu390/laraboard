@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Services\{
     UsuarioService,
     RoleService,
@@ -45,6 +44,7 @@ class DashboardController extends Controller
      * @var PermissionService
      */
     private $menu;
+
     /**
      *  Carrega as instâncias das dependências desta classe.
      */

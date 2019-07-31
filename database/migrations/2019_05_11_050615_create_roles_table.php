@@ -18,6 +18,8 @@ class CreateRolesTable extends Migration
             $table->string('name', 50);
             $table->string('label', 100);
             $table->timestamps();
+
+            $table->softDeletes();
         });
 
         Schema::create('role_user', function (Blueprint $table) {
