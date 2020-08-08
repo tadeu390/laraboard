@@ -255,7 +255,7 @@
                 Menu.loadFormMenu(Menu.url + "menus/moveModule/" + module_id);
 
                 document.getElementById('bt_salvar_modal').addEventListener('click', function(){
-                    Menu.save(Menu.url + "menus/saveMoveModule/");
+                    Menu.save(Menu.url + "menus/saveMoveModule");
                 });
             },
             /**
@@ -308,6 +308,7 @@
             save : function(url)
             {
                 var serializeDados = $('#module_menu_body').serialize();
+
                 $.ajax({
                     url: url,
                     type: 'POST',
